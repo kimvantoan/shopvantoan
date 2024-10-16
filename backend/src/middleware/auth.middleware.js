@@ -1,10 +1,10 @@
+import jwt from "jsonwebtoken";
 const authmiddleware = (req, res, next) => {
   const token = req.cookies.token;
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
   }
   try {
-
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
     next();
@@ -12,15 +12,24 @@ const authmiddleware = (req, res, next) => {
     return res.status(401).json({ message: "Unauthorized" });
   }
 };
+const usermiddleware = (req, res, next) => {
+  authmiddleware(req, res, () => {
+    if (req.user.id === req.params.id) {
+      next();
+    } else {
+      res.status(403).json({ message: "Bạn không phải chính chủ" });
+    }
+  });
+};
 
 const adminmiddleware = (req, res, next) => {
   authmiddleware(req, res, () => {
     if (req.user.role === "admin") {
       next();
     } else {
-      res.status(403).json({ message: "Forbidden" });
+      res.status(403).json({ message: "Bạn không phải admin" });
     }
   });
 };
 
-export { authmiddleware, adminmiddleware };
+export { authmiddleware, adminmiddleware, usermiddleware };

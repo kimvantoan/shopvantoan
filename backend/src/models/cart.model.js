@@ -11,7 +11,10 @@ const cartSchema = new mongoose.Schema(
         color: { type: String, required: true },
       },
     ],
-    totalPrice: Number,
+    totalPrice:{
+      type: Number,
+      default: 0
+    },
   },
   { timestamps: true }
 );
