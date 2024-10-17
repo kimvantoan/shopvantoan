@@ -7,6 +7,7 @@ import authRoutes from "./routes/auth.route.js";
 import productRoutes from "./routes/product.route.js";
 import categoryRotes from "./routes/category.route.js";
 import cartRoutes from "./routes/cart.route.js";
+import addressRoutes from "./routes/address.route.js";
 
 import connectDB from "./configs/db.js";
 import connectCloudinary from "./configs/cloudinary.js";
@@ -22,6 +23,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/product", productRoutes);
 app.use("/api/category",categoryRotes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/address", addressRoutes);
+
 
 app.listen(process.env.PORT, () => {
   console.log(`Server started on port ${process.env.PORT}`);

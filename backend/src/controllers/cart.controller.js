@@ -92,20 +92,19 @@ export const addProductToCart = async (req, res) => {
     res.status(200).json(cart);
   } catch (err) {
     console.log(err);
-    
+
     res.status(400).json({ message: err.message });
   }
 };
 export const removeProductFromCart = async (req, res) => {
   const { productId, color, size } = req.body;
   try {
-    const cart = await Cart.findOne({ userId: req.user.id }); 
+    const cart = await Cart.findOne({ userId: req.user.id });
     if (!cart)
       return res.status(404).json({ message: "Giỏ hàng không tìm thấy" });
 
     const initialLength = cart.products.length;
 
-    // Lọc ra sản phẩm cần xóa
     cart.products = cart.products.filter((product) => {
       return !(
         product.productId.equals(productId) &&
@@ -128,8 +127,10 @@ export const removeProductFromCart = async (req, res) => {
 };
 
 export const deleteCart = async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user.id;
   try {
-    const cart = await Cart.findByIdAndDelete(req.params.id);
+    const cart = await Cart.findOneAndDelete({ userId, _id: id });
     if (!cart)
       return res.status(404).json({ message: "Giỏ hàng không tìm thấy" });
     res.json({ message: "Giỏ hàng đã được xóa" });

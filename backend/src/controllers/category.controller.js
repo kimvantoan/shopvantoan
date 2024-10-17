@@ -3,7 +3,11 @@ import Product from "../models/product.model.js";
 
 const createCategory = async (req, res) => {
   try {
-    const exitcategory = await Category.findOne({ name: req.body.name });
+    const { name } = req.body;
+    if (!name) {
+      return res.status(400).json({ error: "Điền đầy đủ thông tin" });
+    }
+    const exitcategory = await Category.findOne({ name });
     if (exitcategory) {
       return res.status(400).json({ error: "Danh mục đã tồn tại" });
     }

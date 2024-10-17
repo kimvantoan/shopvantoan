@@ -12,15 +12,6 @@ const authmiddleware = (req, res, next) => {
     return res.status(401).json({ message: "Unauthorized" });
   }
 };
-const usermiddleware = (req, res, next) => {
-  authmiddleware(req, res, () => {
-    if (req.user.id === req.params.id) {
-      next();
-    } else {
-      res.status(403).json({ message: "Bạn không phải chính chủ" });
-    }
-  });
-};
 
 const adminmiddleware = (req, res, next) => {
   authmiddleware(req, res, () => {
@@ -32,4 +23,4 @@ const adminmiddleware = (req, res, next) => {
   });
 };
 
-export { authmiddleware, adminmiddleware, usermiddleware };
+export { authmiddleware, adminmiddleware };
