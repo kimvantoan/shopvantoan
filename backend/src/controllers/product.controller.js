@@ -67,14 +67,19 @@ const updateProduct = async (req, res) => {
     console.log(oldProduct.images);
 
     if (oldProduct.images) {
-      for (const image of oldProduct.images) {
-        await cloudinary.uploader.destroy(image.public_id);
-      }
+      await Promise.all(
+        oldProduct.images.map(async (image) => {
+          await cloudinary.uploader.destroy(image.public_id);
+        })
+      );
     }
 
-    for (const image of images) {
+    for (let image of images) {
       const result = await cloudinary.uploader.upload(image.path);
-      imageUrls.push(result.secure_url);
+      imageUrls.push({
+        public_id: result.public_id,
+        url: result.secure_url,
+      });
     }
 
     const product = await Product.findByIdAndUpdate(
