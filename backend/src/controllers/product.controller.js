@@ -22,10 +22,11 @@ const createProduct = async (req, res) => {
 };
 
 const getAllProducts = async (req, res) => {
-  const { page = 1, limit = 10 } = req.query;
+  const { page = 1, limit = 2 } = req.query;
   try {
     const products = await Product.find()
       .populate("category")
+      .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit);
 
