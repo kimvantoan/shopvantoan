@@ -1,6 +1,7 @@
 import { create } from "zustand";
-import axios from "../libs/axios";
+import axios from "../lib/axios";
 import { toast } from "react-toastify";
+
 export const useUserStore = create((set) => ({
   user: null,
   loading: false,
@@ -33,6 +34,15 @@ export const useUserStore = create((set) => ({
         errEmail: error.response.data.errEmail,
         errPassword: error.response.data.errPassword,
       });
+    }
+  },
+  loginGoogle: async (data) => {
+    try {
+      const token = data.credential;   
+      const res = await axios.post("/api/auth/googleLogin",{token});
+      set({ user: res.data.user });
+    } catch (error) {
+      console.log(error);
     }
   },
   logout: async () => {

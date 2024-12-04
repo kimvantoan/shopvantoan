@@ -3,53 +3,61 @@ import logo from "../../assets/Logo.jpg";
 import { Link, NavLink } from "react-router-dom";
 import { IoMdSearch } from "react-icons/io";
 import { FaRegUser } from "react-icons/fa";
-import { FaRegHeart } from "react-icons/fa6";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 const HeaderUser = () => {
+  const listNav = [
+    {
+      name: "Trang chủ",
+      path: "/",
+    },
+    {
+      name: "Cửa hàng",
+      path: "/shop",
+    },
+    {
+      name: "Nam",
+      path: "/men",
+    },
+    {
+      name: "Nữ",
+      path: "/women",
+    },
+    {
+      name: "Trẻ em",
+      path: "/kid",
+    },
+    {
+      name: "Liên hệ",
+      path: "/contact",
+    },
+  ]
   return (
-    <header className="px-28 py-6 flex justify-between items-center">
+    <header className="px-40 py-5 flex justify-between items-center">
       <img src={logo} alt="" />
       <ul className="flex gap-10 text-lg">
-        <li>
-          <NavLink
-            to={"/"}
-            className={({ isActive }) => (isActive ? "font-semibold" : "")}
-          >
-            Trang chủ
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to={"/shop"}
-            className={({ isActive }) => (isActive ? "font-bold" : "")}
-          >
-            Cửa hàng
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to={"/contact"}
-            className={({ isActive }) => (isActive ? "font-bold" : "")}
-          >
-            Liên hệ
-          </NavLink>
-        </li>
+        {listNav.map((item, index) => (
+          <li key={index}>
+            <NavLink
+              to={item.path}
+              className={({ isActive }) => (isActive ? "font-semibold" : "text-gray-500")}
+            >
+              {item.name}
+            </NavLink>
+          </li>
+        ))}
       </ul>
 
       <div className="flex gap-6 items-center">
         <label className="input input-bordered flex items-center">
-          <input type="text" className="grow" placeholder="Search" />
-          <IoMdSearch size={26} cursor={"pointer"} />
+          <input type="text" placeholder="Tìm kiếm" />
+          <IoMdSearch size={26} className="text-gray-500" cursor={"pointer"} />
         </label>
         <Link to={"/account"}>
-          <FaRegUser size={24} cursor={"pointer"} />
-        </Link>
-        <Link to={"/account/wishlish"}>
-          <FaRegHeart size={24} cursor={"pointer"} />
+          <FaRegUser size={23} className="text-gray-500" cursor={"pointer"} />
         </Link>
         <Link to={"/cart"} className="indicator">
-          <span className="indicator-item badge badge-secondary">9</span>
-          <AiOutlineShoppingCart size={26} cursor={"pointer"} />
+          <span className="indicator-item badge  bg-gray-200 font-bold text-gray-500">9</span>
+          <AiOutlineShoppingCart className="text-gray-500" size={26} cursor={"pointer"} />
         </Link>
       </div>
     </header>

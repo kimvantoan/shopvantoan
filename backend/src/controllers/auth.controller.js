@@ -1,7 +1,7 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-
+import { OAuth2Client } from "google-auth-library";
 export const register = async (req, res) => {
   const { fullname, email, password } = req.body;
   if (!fullname || !email || !password) {
@@ -26,9 +26,7 @@ export const register = async (req, res) => {
     await newUser.save();
     res.status(201).json({ message: "Đăng kí thành công" });
   } catch (error) {
-    res
-      .status(400)
-      .json({ message: "Error registering user"});
+    res.status(400).json({ message: "Error registering user" });
     console.log(error);
   }
 };
@@ -62,12 +60,39 @@ export const login = async (req, res) => {
       secure: true,
       expiresIn: "1d",
     });
-    res.status(200).json({ user,message: "Đăng nhập thành công" });
+    res.status(200).json({ user, message: "Đăng nhập thành công" });
     console.log(user);
-    
   } catch (error) {
     res.status(500).json({ message: "Error logging in", error });
     console.log(error);
+  }
+};
+
+export const loginGoogle = async (req, res) => {
+  const client_id = process.env.GOOGLE_CLIENT_ID;
+  const client = new OAuth2Client(client_id);
+
+  const { token } = req.body;
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: client_id,
+    });
+
+    const payload = ticket.getPayload();
+    let account = await User.findOne({ email: payload.email });
+
+    if (!account) {
+      account = await new User({
+        fullname: payload.name,
+        email: payload.email,
+        avatar: payload.picture,
+      }).save();
+    }
+
+    res.json({ success: true, user: payload });
+  } catch (error) {
+    res.status(401).json({ success: false, error: "Invalid token" });
   }
 };
 

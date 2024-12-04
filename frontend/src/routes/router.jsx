@@ -1,8 +1,9 @@
 import Home from "../pages/user/home/Home"
-import Login from "../pages/user/login/Login"
-import Signup from "../pages/user/signup/Signup"
+import Login from "../pages/user/authentication/Login"
+import Signup from "../pages/user/authentication/Signup"
 import Dashboard from "../pages/admin/dasboard/Dashboard"
-import { Store } from "../pages/user/shop/Store"
+import ForgotPassword from "@/pages/user/authentication/ForgotPassword"
+import ResetPassword from "@/pages/user/authentication/ResetPassword"
 export const userRouter = [
     {
         path: "/",
@@ -17,8 +18,12 @@ export const userRouter = [
         component:<Signup></Signup>,
     },
     {
-        path: "/shop",
-        component:<Store></Store>,
+        path: "/forgotpassword",
+        component:<ForgotPassword></ForgotPassword>,
+    },
+    {
+        path: "/resetpassword",
+        component:<ResetPassword></ResetPassword>,
     }
 ]
 export const adminRouter = [
