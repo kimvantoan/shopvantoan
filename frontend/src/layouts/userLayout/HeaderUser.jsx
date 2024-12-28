@@ -4,47 +4,61 @@ import { Link, NavLink } from "react-router-dom";
 import { IoMdSearch } from "react-icons/io";
 import { FaRegUser } from "react-icons/fa";
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { IoCartOutline } from "react-icons/io5";
+import { CiHeart } from "react-icons/ci";
+import { CiUser } from "react-icons/ci";
+import { IoIosLogOut } from "react-icons/io";
+import { LiaShippingFastSolid } from "react-icons/lia";
+import ShopNav from "@/components/ShopNav";
 const HeaderUser = () => {
-  const listNav = [
+  const account = [
     {
-      name: "Trang chủ",
-      path: "/",
+      name: "Đơn hàng",
+      icon: <IoCartOutline />,
+      path: "/orders",
     },
     {
-      name: "Cửa hàng",
-      path: "/shop",
+      name: "Sản phẩm yêu thích",
+      icon: <CiHeart />,
+      path: "/wishlist",
     },
     {
-      name: "Nam",
-      path: "/men",
+      name: "Địa chỉ",
+      icon: <LiaShippingFastSolid />,
+      path: "/address",
     },
     {
-      name: "Nữ",
-      path: "/women",
+      name: "Tài khoản",
+      icon: <CiUser />,
+      path: "/account",
     },
-    {
-      name: "Trẻ em",
-      path: "/kid",
-    },
-    {
-      name: "Liên hệ",
-      path: "/contact",
-    },
-  ]
+  ];
   return (
-    <header className="px-40 py-5 flex justify-between items-center">
+    <header className="px-40 py-5 flex justify-between items-center border-b">
       <img src={logo} alt="" />
-      <ul className="flex gap-10 text-lg">
-        {listNav.map((item, index) => (
-          <li key={index}>
-            <NavLink
-              to={item.path}
-              className={({ isActive }) => (isActive ? "font-semibold" : "text-gray-500")}
-            >
-              {item.name}
-            </NavLink>
-          </li>
-        ))}
+      <ul className="flex items-center gap-10 text-lg">
+        <li>
+          <Link to="/" className={""}>
+            Trang chủ
+          </Link>
+        </li>
+        <li>
+          
+            <ShopNav />
+        </li>
+        <li>
+          <Link to="/" className={""}>
+            Liên hệ
+          </Link>
+        </li>
       </ul>
 
       <div className="flex gap-6 items-center">
@@ -52,12 +66,34 @@ const HeaderUser = () => {
           <input type="text" placeholder="Tìm kiếm" />
           <IoMdSearch size={26} className="text-gray-500" cursor={"pointer"} />
         </label>
-        <Link to={"/account"}>
-          <FaRegUser size={23} className="text-gray-500" cursor={"pointer"} />
-        </Link>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <FaRegUser size={23} className="text-gray-500" cursor={"pointer"} />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="-translate-x-1/3">
+            <DropdownMenuLabel>Tài khoản của tôi</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {account.map((item) => (
+              <Link to={item.path}>
+                <DropdownMenuItem>
+                  {item.icon} {item.name}
+                </DropdownMenuItem>
+              </Link>
+            ))}
+            <DropdownMenuItem className="text-red-500">
+              <IoIosLogOut /> Đăng xuất
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <Link to={"/cart"} className="indicator">
-          <span className="indicator-item badge  bg-gray-200 font-bold text-gray-500">9</span>
-          <AiOutlineShoppingCart className="text-gray-500" size={26} cursor={"pointer"} />
+          <span className="indicator-item badge  bg-gray-200 font-bold text-gray-500">
+            9
+          </span>
+          <AiOutlineShoppingCart
+            className="text-gray-500"
+            size={26}
+            cursor={"pointer"}
+          />
         </Link>
       </div>
     </header>

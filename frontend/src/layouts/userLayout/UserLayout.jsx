@@ -5,9 +5,9 @@ import { Outlet } from 'react-router-dom'
 
 const UserLayout = () => {
   return (
-    <div>
+    <div className='flex flex-col min-h-screen justify-between'>
       <HeadersUser />
-      <main>
+      <main className=''>
         <Outlet /> 
       </main>
       <FooterUser />
