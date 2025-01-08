@@ -5,42 +5,54 @@ import { FaStar } from "react-icons/fa";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Button } from "@/components/ui/button";
 import { CiHeart } from "react-icons/ci";
-import a from "../../../assets/a.jpg";
+import { FaRegHeart } from "react-icons/fa";
 import {
   Carousel,
-  CarouselContent,
-  CarouselItem,
+  CarouselMainContainer,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel";
+  SliderMainItem,
+  CarouselThumbsContainer,
+  SliderThumbItem,
+} from "@/components/ui/embla-carousel";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import Share from "./Share";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import CartSheet from "@/components/CartSheet";
-const product = () => {
+
+const Carousel_Product = () => {
   const color = ["red", "green", "blue", "yellow", "black", "white"];
   const size = ["S", "M", "L", "XL", "XXL"];
   return (
     <div className="flex items-start gap-32 mt-16">
-      <Carousel className="bg-gray-100 rounded-lg w-1/2">
-        <CarouselContent>
+      <Carousel>
+        <CarouselNext className="top-1/3 -translate-y-1/3" />
+        <CarouselPrevious className="top-1/3 -translate-y-1/3" />
+        <CarouselMainContainer className="h-60">
           {Array.from({ length: 5 }).map((_, index) => (
-            <CarouselItem key={index}>
-              <div className="h-[574px]">
-                <img
-                  src={a}
-                  alt={`Slide ${index + 1}`}
-                  className="h-full mx-auto object-cover"
-                />
+            <SliderMainItem key={index} className="bg-transparent">
+              <div className="outline outline-1 outline-border size-full flex items-center justify-center rounded-xl bg-background">
+                Slide {index + 1}
               </div>
-            </CarouselItem>
+            </SliderMainItem>
           ))}
-        </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+        </CarouselMainContainer>
+        <CarouselThumbsContainer>
+          {Array.from({ length: 5 }).map((_, index) => (
+            <SliderThumbItem
+              key={index}
+              index={index}
+              className="bg-transparent"
+            >
+              <div className="outline outline-1 outline-border size-full flex items-center justify-center rounded-xl bg-background">
+                Slide {index + 1}
+              </div>{" "}
+            </SliderThumbItem>
+          ))}
+        </CarouselThumbsContainer>
       </Carousel>
 
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
           <h2 className="font-bold text-2xl">Raw Black T-Shirt Lineup</h2>
           <i className="p-2 cursor-pointer bg-gray-100 rounded-full">
@@ -52,8 +64,8 @@ const product = () => {
             </Dialog>
           </i>
         </div>
-        <div className="flex items-center gap-2 bg-gray-100 p-2 w-fit rounded-3xl text-gray-600">
-          <FaStar />
+        <div className="flex items-center gap-2 text-gray-600">
+          <FaStar className="text-yellow-500" />
           <p>4.2 -</p>
           <p>54 Đánh giá</p>
         </div>
@@ -62,12 +74,11 @@ const product = () => {
           <s className="text-gray-500">{formatPrice(40000)}</s>
         </div>
         <div className="">
-          <h3 className="font-medium text-gray-600 mb-2">Màu sắc</h3>
+          <h3 className="font-bold mb-2">Màu sắc</h3>
           <ToggleGroup variant="outline" type="single">
             {color.map((color) => (
               <ToggleGroupItem
                 value={color}
-                className="data-[state=on]:bg-gray-200"
                 key={color}
                 aria-label="Toggle color"
               >
@@ -77,28 +88,23 @@ const product = () => {
           </ToggleGroup>
         </div>
         <div className="flex flex-col">
-          <h3 className="font-medium text-gray-600 mb-2">Kích cỡ</h3>
+          <h3 className="font-bold mb-2">Kích cỡ</h3>
           <ToggleGroup
             variant="outline"
             type="single"
             className="justify-start"
           >
             {size.map((size) => (
-              <ToggleGroupItem
-                value={size}
-                className="data-[state=on]:bg-gray-200"
-                key={size}
-                aria-label="Toggle size"
-              >
+              <ToggleGroupItem value={size} key={size} aria-label="Toggle size">
                 {size}
               </ToggleGroupItem>
             ))}
           </ToggleGroup>
         </div>
         <div className="">
-          <h3 className="font-medium text-gray-600 mb-2">Số lượng</h3>
+          <h3 className="font-bold mb-2">Số lượng</h3>
 
-          <div className="border-2 rounded-sm w-fit">
+          <div className="border border-black rounded-sm w-fit">
             <Button variant="ghost" className="text-xl">
               -
             </Button>
@@ -111,14 +117,14 @@ const product = () => {
           </div>
         </div>
         <div className="flex gap-3">
-          <Button className="w-full">
-            <Sheet>
-              <SheetTrigger>Thêm vào giỏ hàng</SheetTrigger>
-              <CartSheet/>
-            </Sheet>
-          </Button>
-          <Button variant="outline">
-            <CiHeart />
+          <Sheet>
+            <SheetTrigger>
+              <Button>Thêm vào giỏ hàng</Button>
+            </SheetTrigger>
+            <CartSheet />
+          </Sheet>
+          <Button variant="outline" className="border-black">
+            <FaRegHeart />
           </Button>
         </div>
       </div>
@@ -126,4 +132,4 @@ const product = () => {
   );
 };
 
-export default product;
+export default Carousel_Product;

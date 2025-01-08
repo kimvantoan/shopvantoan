@@ -9,14 +9,15 @@ const WishItem = () => {
       <div className="size-20 bg-gray-100 rounded-lg overflow-hidden">
         <img src={hero} className="overflow-cover" alt="" />
       </div>
-      <div className="col-span-2">
+      <div className="col-span-2 space-y-3">
         <p className="font-semibold">Raw Black T-Shirt</p>
-        <p className="text-gray-500 text-sm">Color: Black Size: XL</p>
+        <p className="text-gray-500 text-sm">Brand</p>
       </div>
       <p className="place-self-center">{formatPrice(30000)}</p>
       <Button variant="outline">Chi tiết</Button>
-      <Button variant="link" className="text-red-500">Xóa</Button>
-
+      <Button variant="link" className="text-red-500">
+        Xóa
+      </Button>
     </div>
   );
 };

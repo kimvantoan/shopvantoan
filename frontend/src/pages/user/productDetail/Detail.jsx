@@ -14,8 +14,8 @@ import {
 } from "@/components/ui/pagination";
 const Detail = () => {
   return (
-    <Tabs defaultValue="Details" className="mx-auto w-2/3">
-      <TabsList className="grid  grid-cols-2">
+    <Tabs defaultValue="Details" className="w-full">
+      <TabsList className="grid grid-cols-2 w-1/2">
         <TabsTrigger value="Details" className="flex gap-2">
           <BiDotsHorizontalRounded /> <p>Chi tiết sản phẩm</p>
         </TabsTrigger>
@@ -25,39 +25,44 @@ const Detail = () => {
       </TabsList>
       <TabsContent value="Details">
         <h3 className="font-semibold mb-4">Chi tiết sản phẩm</h3>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm">
           Make changes to your account here.Make changes to your account here.
         </p>
       </TabsContent>
       <TabsContent value="Reviews">
-        <h3 className="font-semibold mb-4">Đánh giá</h3>
-        <span className="font-bold text-3xl">4.2</span>{" "}
-        <span className="text-sm text-gray-600">54 Đánh giá</span>
+        <h3 className="font-semibold mb-4">Khách hàng đánh giá</h3>
         <div className="flex flex-col">
-          <div className="grid grid-cols-5 py-7">
-            <img
-              src={hero}
-              alt=""
-              className="size-12 rounded-full place-self-center"
-            />
-            <div className="col-span-3 flex flex-col break-words">
-              <p className="font-medium">Username</p>
-              <p className="text-gray-600 mb-2">23 APRIL</p>
-              <p className="text-gray-600 ">
+          <div className="flex flex-col py-7 border-b mb-4">
+            <div className="flex gap-3">
+              <img
+                src="https://avatar.iran.liara.run/public"
+                alt=""
+                className="size-16 rounded-full place-self-center"
+              />
+              <div className="flex flex-col justify-between py-1">
+                <p className="font-medium">Username</p>
+                <div className="flex justify-self-end">
+                  {[...Array(5)].map((_, index) => (
+                    <span
+                      key={index}
+                      className={`text-lg ${
+                        index < 4 ? "text-yellow-500" : "text-gray-300"
+                      }`}
+                    >
+                      <FaStar />
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col break-words mt-3 space-y-1">
+              <p className="text-sm">
                 wReviewReviewReviewReviewReviewReviewReviewRevieReviewReviewReviewReviewReviewReviewReviewReviewReviewReview
               </p>
-            </div>
-            <div className="flex justify-self-end ">
-              {[...Array(5)].map((_, index) => (
-                <span
-                  key={index}
-                  className={`text-2xl ${
-                    index < 4 ? "text-yellow-500" : "text-gray-300"
-                  }`}
-                >
-                  <FaStar />
-                </span>
-              ))}
+              <span className="text-sm text-gray-400">
+                Review on <span className=" text-black">01/01/2023</span>
+              </span>
             </div>
           </div>
         </div>

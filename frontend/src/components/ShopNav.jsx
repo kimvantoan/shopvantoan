@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 const ShopNav = () => {
   const menuItems = [
     {
-      category: "Men",
+      category: "Nam",
       href: "/men",
       items: [
         { title: "T-Shirts", href: "/men/t-shirts" },
@@ -22,7 +22,7 @@ const ShopNav = () => {
       ],
     },
     {
-      category: "Women",
+      category: "Nữ",
       href: "/women",
       items: [
         { title: "Kurtas & Suits", href: "/women/kurtas-suits" },
@@ -33,7 +33,7 @@ const ShopNav = () => {
       ],
     },
     {
-      category: "Kids",
+      category: "Trẻ em",
       href: "/kids",
       items: [
         { title: "T-Shirts", href: "/kids/t-shirts" },

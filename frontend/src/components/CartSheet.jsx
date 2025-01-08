@@ -5,46 +5,46 @@ import formatPrice from "@/utils/FormatPrice";
 import { Button } from "./ui/button";
 import { IoClose } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import { FaRegTrashCan } from "react-icons/fa6";
 const CartSheet = () => {
   return (
     <SheetContent>
       <SheetHeader>
-        <SheetTitle>Giỏ hàng</SheetTitle>
-          <div className="grid grid-cols-4 gap-5 py-5 border-b-2">
-            <div className="size-20 bg-gray-100 rounded-lg overflow-hidden relative">
-              <img src={hero} alt="" className="h-full mx-auto object-cover" />
-              <IoClose className="absolute top-0 size-6 right-0 cursor-pointer bg-gray-200" />
-            </div>
-            <div className="col-span-3 ">
-              <div className="grid grid-cols-5 justify-between gap-4 text-sm mb-2">
-                <p className="font-medium col-span-3 break-words">Raw Black T-Shirt  </p>
-                <p className="text-gray-600">xanh</p>
-                <p className="text-gray-600">XL</p>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="border-2 rounded-sm w-fit">
-                  <Button variant="ghost" className="text-xl">
-                    -
-                  </Button>
-                  <Button variant="ghost" className="text-lg">
-                    1
-                  </Button>
-                  <Button variant="ghost" className="text-xl">
-                    +
-                  </Button>
-                </div>
-                <p className="font-medium text-lg">{formatPrice(30000)}</p>
-              </div>
-            </div>
+        <SheetTitle>Bạn có 3 sản phẩm trong giỏ hàng</SheetTitle>
+        <div className="flex gap-3 py-5 border-b-2">
+          <div className="size-20 bg-gray-100 rounded-lg overflow-hidden relative">
+            <img src={hero} alt="" className="h-full mx-auto object-cover" />
           </div>
-          <div className="flex flex-col gap-4">
-            <div className="flex justify-between">
-              <p>Tổng tiền:</p>
-              <p>{formatPrice(30000)}</p>
+          <div className="w-full flex justify-between items-end gap-3">
+            <div className="flex flex-col text-sm mb-2">
+              <p className="col-span-3 break-words">
+                Raw Black T-ShirtT
+              </p>
+              <p>
+                Màu sắc: <span>xanh</span>
+              </p>
+              <p>
+                Kích thước: <span>XL</span>
+              </p>
+              <p className="font-bold">1x{formatPrice(30000)}</p>
             </div>
+            <FaRegTrashCan className="text-red-500 cursor-pointer" />
+          </div>
+        </div>
+        <div className="flex flex-col gap-4">
+          <div className="flex justify-between font-bold">
+            <p>Tổng tiền:</p>
+            <p>{formatPrice(30000)}</p>
+          </div>
+          <Link to={"/cart"}>
             <Button className="w-full">Giỏ hàng</Button>
-            <Link to="/checkout" className="mx-auto underline" >Thanh toán</Link>
-          </div>
+          </Link>
+          <Link to="/checkout">
+            <Button variant="outline" className="w-full">
+              Mua ngay
+            </Button>
+          </Link>
+        </div>
       </SheetHeader>
     </SheetContent>
   );

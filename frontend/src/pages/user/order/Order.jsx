@@ -12,7 +12,6 @@ const Order = () => {
     <div>
       <PageTitle pagetitle="Đơn hàng" crumb={breadcrumbData} />
       <LayoutProfile>
-        <h2 className="mb-5 font-semibold">Đơn hàng</h2>
         <div className="flex flex-col gap-3">
           <OrderItem />
           <OrderItem />

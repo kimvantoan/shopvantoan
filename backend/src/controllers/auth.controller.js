@@ -43,6 +43,7 @@ export const login = async (req, res) => {
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
+
     if (!isPasswordValid) {
       return res.status(401).json({ errPassword: "Sai mật khẩu" });
     }
@@ -58,7 +59,7 @@ export const login = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      expiresIn: "1d",
+      maxAge: 86400000,
     });
     res.status(200).json({ user, message: "Đăng nhập thành công" });
     console.log(user);
