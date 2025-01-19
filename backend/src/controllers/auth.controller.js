@@ -37,7 +37,7 @@ export const login = async (req, res) => {
     return res.status(400).json({ message: "Hãy điền đầy đủ thông tin" });
   }
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).lean();
     if (!user) {
       return res.status(400).json({ errEmail: "Email chưa được đăng kí" });
     }
@@ -61,8 +61,11 @@ export const login = async (req, res) => {
       secure: true,
       maxAge: 86400000,
     });
-    res.status(200).json({ user, message: "Đăng nhập thành công" });
-    console.log(user);
+    delete user.password;
+    
+    res
+      .status(200)
+      .json({ user, message: "Đăng nhập thành công" });
   } catch (error) {
     res.status(500).json({ message: "Error logging in", error });
     console.log(error);

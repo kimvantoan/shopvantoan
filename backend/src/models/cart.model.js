@@ -10,10 +10,6 @@ const cartSchema = new mongoose.Schema({
       color: { type: String, required: true },
     },
   ],
-  totalPrice: {
-    type: Number,
-    default: 0,
-  },
 });
 
 const Cart = mongoose.model("Cart", cartSchema);

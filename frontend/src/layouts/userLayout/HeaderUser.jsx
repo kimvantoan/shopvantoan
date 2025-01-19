@@ -18,9 +18,10 @@ import { IoIosLogOut } from "react-icons/io";
 import { LiaShippingFastSolid } from "react-icons/lia";
 import ShopNav from "@/components/ShopNav";
 import { useAuthStore } from "@/stores/authStore";
+import { useCartStore } from "@/stores/cartStore";
 const HeaderUser = () => {
-  const { user,logout } = useAuthStore();
-  
+  const { user, logout } = useAuthStore();
+  const { cart} = useCartStore();
   const haveUser = [
     {
       title: "Đơn hàng",
@@ -59,7 +60,7 @@ const HeaderUser = () => {
       <ul className="flex items-center gap-10 text-lg">
         <li>
           <Link to="/" className={""}>
-            Trang chủ
+            TRANG CHỦ
           </Link>
         </li>
         <li>
@@ -67,7 +68,7 @@ const HeaderUser = () => {
         </li>
         <li>
           <Link to="/" className={""}>
-            Liên hệ
+            LIÊN HỆ
           </Link>
         </li>
       </ul>
@@ -105,8 +106,8 @@ const HeaderUser = () => {
           </DropdownMenuContent>
         </DropdownMenu>
         <Link to={"/cart"} className="indicator">
-          <span className="indicator-item badge  bg-gray-200 font-bold text-gray-500">
-            9
+          <span className="indicator-item badge bg-gray-200 font-bold text-gray-500">
+            {cart.length}
           </span>
           <AiOutlineShoppingCart
             className="text-gray-500"

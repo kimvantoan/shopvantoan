@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -12,12 +12,11 @@ const Signup = () => {
     email: "",
     password: "",
   });
-  const { signup, loading, errEmail, errPassword } = useAuthStore();
-  console.log(loading);
-  
-  const handleSignup = (e) => {
+  const { signup, loading } = useAuthStore();
+
+  const handleSignup = async (e) => {
     e.preventDefault();
-    signup(formData);
+    await signup(formData);
   };
   const handleDataChange = (e) => {
     const { name, value } = e.target;
@@ -26,10 +25,6 @@ const Signup = () => {
       [name]: value,
     }));
   };
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
-
   const breadcrumbData = [
     { label: "Trang chủ", href: "/" },
     { label: "Đăng kí", href: "/signup" },
@@ -60,9 +55,6 @@ const Signup = () => {
             name="email"
             id="email"
           />
-          {errEmail && (
-            <p className="text-red-500 text-sm">{errEmail}</p>
-          )}
         </div>
         <div className="grid w-full items-center gap-1.5">
           <Label htmlFor="password">Mật khẩu</Label>
@@ -73,9 +65,6 @@ const Signup = () => {
             name="password"
             id="password"
           />
-          {errPassword && (
-            <p className="text-red-500 text-sm">{errPassword}</p>
-          )}
         </div>
         {loading ? (
           <LoadingButton loading className="w-full">

@@ -1,44 +1,20 @@
 import CardProduct from "@/components/CardProduct";
-import React from "react";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+import { useProductStore } from "@/stores/productStore";
+import React, { useEffect } from "react";
+
 const Similar = () => {
+  const { products, getAllProduct } = useProductStore();
+  useEffect(() => {
+    getAllProduct(1,5);
+  }, []);
   return (
     <div>
-      <h2 className="font-bold text-2xl">Có thể bạn cũng thích</h2>
-      <p className="text-gray-600 uppercase text-sm mb-14 mt-2">
-        Sản phẩm tương tự
-      </p>
-      <div className="grid grid-cols-4 gap-5 mb-10">
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
+      <h2 className="text-2xl">SẢN PHẨM LIÊN QUAN</h2>
+      <div className="grid grid-cols-5 gap-5 my-10">
+        {products?.map((product) => (
+          <CardProduct key={product._id} product={product} />
+        ))}
       </div>
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="#" />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
     </div>
   );
 };

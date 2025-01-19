@@ -5,10 +5,9 @@ export const createOrder = async (req, res) => {
   const userId = req.user.id;
   const cart = await Cart.findOne({ userId });
   const products = cart.products;
-  const totalPrice = cart.totalPrice;
 
   try {
-    const order = new Order({ userId, products, totalPrice, ...req.body });
+    const order = new Order({ userId, products, ...req.body });
     await order.save();
     res.status(201).json(order);
   } catch (error) {
@@ -75,7 +74,7 @@ export const getOrderById = async (req, res) => {
     const order = await Order.findById(id)
       .populate("userId")
       .populate("products.productId");
-    
+
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }

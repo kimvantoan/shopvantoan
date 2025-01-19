@@ -18,8 +18,8 @@ export const createAddress = async (req, res) => {
   });
 
   try {
-    const savedAddress = await newAddress.save();
-    res.status(201).json(savedAddress);
+    const address = await newAddress.save();
+    res.status(201).json({ address,message:"Thêm địa chỉ thành công" });
   } catch (error) {
     res
       .status(400)
@@ -31,7 +31,7 @@ export const getAllAddresses = async (req, res) => {
   const userId = req.user.id;
   try {
     const addresses = await Address.find({ userId });
-    res.status(200).json(addresses);
+    res.status(200).json({ addresses });
   } catch (error) {
     res
       .status(500)
@@ -83,10 +83,11 @@ export const deleteAddress = async (req, res) => {
       userId,
       _id: id,
     });
+
     if (!deletedAddress) {
       return res.status(404).json({ message: "Địa chỉ không tồn tại" });
     }
-    res.status(200).json({ message: "Địa chỉ đã được xóa thành công" });
+    res.status(200).json({ message: "Địa chỉ đã được xóa" });
   } catch (error) {
     res
       .status(500)

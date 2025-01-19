@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 const authmiddleware = (req, res, next) => {
   const token = req.cookies.token;
   if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ message: "token invalid" });
   }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);

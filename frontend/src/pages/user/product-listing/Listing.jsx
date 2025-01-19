@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/pagination";
 const Listing = () => {
   return (
-    <div className="flex justify-between mx-40 gap-10 mt-10">
+    <div className="flex justify-between mx-20 gap-10 mt-10">
       <Fillter />
       <div className="space-y-10 w-full">
         <ListProduct />

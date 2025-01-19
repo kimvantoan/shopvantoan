@@ -2,7 +2,6 @@ import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { FaStar } from "react-icons/fa";
-import hero from "../../../assets/hero.png";
 import {
   Pagination,
   PaginationContent,
@@ -12,7 +11,9 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useProductStore } from "@/stores/productStore";
 const Detail = () => {
+  const {product} = useProductStore();
   return (
     <Tabs defaultValue="Details" className="w-full">
       <TabsList className="grid grid-cols-2 w-1/2">
@@ -26,7 +27,7 @@ const Detail = () => {
       <TabsContent value="Details">
         <h3 className="font-semibold mb-4">Chi tiết sản phẩm</h3>
         <p className="text-sm">
-          Make changes to your account here.Make changes to your account here.
+          {product?.description}
         </p>
       </TabsContent>
       <TabsContent value="Reviews">

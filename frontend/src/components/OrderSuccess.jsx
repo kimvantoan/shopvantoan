@@ -1,13 +1,9 @@
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { IoBagCheckOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 const OrderSuccess = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -16,7 +12,7 @@ const OrderSuccess = () => {
       <DialogContent className="sm:max-w-[425px]">
         <div className="flex flex-col gap-3 items-center">
           <div className="p-5 bg-black text-white rounded-full">
-            <IoBagCheckOutline  className="size-10"/>
+            <IoBagCheckOutline className="size-10" />
           </div>
           <h1 className="font-bold text-2xl">Đặt hàng thành công</h1>
           <p className="text-center">
@@ -27,7 +23,9 @@ const OrderSuccess = () => {
 
         <div className="flex flex-col gap-3">
           <Button onClick={() => navigate("/orders")}>Xem đơn hàng</Button>
-          <Button onClick={() => navigate("/")} variant="outline">Trang chủ</Button>
+          <Button onClick={() => navigate("/")} variant="outline">
+            Trang chủ
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

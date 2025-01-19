@@ -7,7 +7,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 const PageTitle = ({ pagetitle, crumb }) => (
-    <div className="w-full bg-gray-200 py-8 px-40">
+    <div className="w-full bg-gray-200 py-3 px-40">
       <h1 className="text-2xl font-bold mb-4">{pagetitle}</h1>
       <Breadcrumb>
         <BreadcrumbList>

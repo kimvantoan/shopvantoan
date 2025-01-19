@@ -1,26 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Link, useNavigate } from "react-router-dom";
-import { GoogleLogin } from "@react-oauth/google";
+import { Link } from "react-router-dom";
 import PageTitle from "@/components/PageTitle";
 import { useAuthStore } from "@/stores/authStore";
 import { LoadingButton } from "@/components/ui/loading-button";
+import { useCartStore } from "@/stores/cartStore";
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const { login, errEmail, errPassword, loading } = useAuthStore();
-
-  const handleLogin = (e) => {
+  const { login, loading } = useAuthStore();
+  const { getCart } = useCartStore();
+  const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      login(formData);
-    } catch (error) {
-      console.log(error);
-    }
+    await login(formData);
+    await getCart();
   };
   const handleDataChange = (e) => {
     const { name, value } = e.target;
@@ -29,9 +26,6 @@ const Login = () => {
       [name]: value,
     }));
   };
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
   const breadcrumbData = [
     { label: "Trang chủ", href: "/" },
     { label: "Đăng nhập", href: "/login" },
@@ -43,7 +37,6 @@ const Login = () => {
         onSubmit={handleLogin}
         className="flex flex-col gap-4 mx-auto my-20 w-1/4"
       >
-        {/* <GoogleLogin className="w-full" /> */}
         <div className="flex gap-2 self-center items-center">
           <div className="h-px bg-gray-400 w-10"></div>
           <p>Hoặc</p>
@@ -58,7 +51,6 @@ const Login = () => {
             name="email"
             id="email"
           />
-          {errEmail && <p className="text-red-500 text-sm">{errEmail}</p>}
         </div>
         <div className="grid w-full items-center gap-1.5">
           <Label htmlFor="password">Mật khẩu</Label>
@@ -69,7 +61,6 @@ const Login = () => {
             name="password"
             id="password"
           />
-          {errPassword && <p className="text-red-500 text-sm">{errPassword}</p>}
         </div>
         <div className="text-right hover:underline">
           <Link to={"/forgotpassword"}>Quên mật khẩu</Link>

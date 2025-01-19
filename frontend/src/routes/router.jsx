@@ -11,12 +11,10 @@ import Wishlist from "@/pages/user/wishlist/Wishlist";
 import Address from "@/pages/user/address/Address";
 import Account from "@/pages/user/account/Account";
 import Listing from "@/pages/user/product-listing/Listing";
-import ShipAddress from "@/pages/user/checkout/ShipAddress";
-import Payment from "@/pages/user/checkout/Payment";
-import ReviewOrder from "@/pages/user/checkout/ReviewOrder";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import UserLayout from "@/layouts/userLayout/UserLayout";
 import { useAuthStore } from "@/stores/authStore";
+import Checkout from "@/pages/user/checkout/Checkout";
 
 const AuthenticatedUser = ({ children }) => {
   const { user } = useAuthStore();
@@ -83,16 +81,8 @@ export const router = createBrowserRouter([
         element: <Listing />,
       },
       {
-        path: "/checkout/address",
-        element: <ShipAddress />,
-      },
-      {
-        path: "/checkout/payment",
-        element: <Payment />,
-      },
-      {
-        path: "/checkout/review",
-        element: <ReviewOrder />,
+        path: "/checkout",
+        element: <Checkout />,
       },
     ],
   },

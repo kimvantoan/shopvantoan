@@ -1,32 +1,45 @@
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useCartStore } from "@/stores/cartStore";
 import formatPrice from "@/utils/FormatPrice";
 import React from "react";
-import hero from "@/assets/hero.png";
 import { FaRegTrashCan } from "react-icons/fa6";
-const CartItem = () => {
+
+const CartItem = ({ cartItem }) => {
+  const { updateQuantity,deleteCart } = useCartStore();
   return (
     <div className="grid grid-cols-8 items-center">
       <div className="size-20 bg-gray-100 rounded-lg overflow-hidden">
-        <img src={hero} className="overflow-cover" alt="" />
+        <img className="overflow-cover" alt="" src={cartItem?.productId.images[0].url} />
       </div>
       <div className="col-span-3">
-        <p className="font-bold">Raw Black T-Shirt</p>
-        <p>Color: Black</p>
-        <p>Size: XL</p>
-      </div>
-      <p className="place-self-center">{formatPrice(30000)}</p>
-      <div className="border flex items-center gap-2 rounded-xl border-black overflow-hidden w-fit col-span-2 place-self-center">
-        <Button variant="ghost" className="text-xl">
-          -
-        </Button>
-        <p style={{ userSelect: "none" }} className="text-lg">
-          1
+        <p className="font-bold">{cartItem?.productId.name}</p>
+        <p>
+          {cartItem?.color}/{cartItem?.size}
         </p>
-        <Button variant="ghost" className="text-xl">
-          +
-        </Button>
+        <p>{formatPrice(cartItem?.productId.price)}</p>
       </div>
-      <Button className="w-fit place-self-center" variant="ghost">
+      <Input
+        type="number"
+        onChange={(e) => {
+          updateQuantity({
+            id: cartItem._id,
+            quantity: e.target.value,
+          });
+        }}
+        min={1}
+        defaultValue={cartItem?.quantity}
+        className="place-self-center col-span-2 w-32"
+      />
+      <p className="place-self-center">
+        {formatPrice(cartItem?.quantity * cartItem?.productId.price)}
+      </p>
+
+      <Button
+        onClick={() => deleteCart(cartItem._id)}
+        className="w-fit place-self-center"
+        variant="ghost"
+      >
         <FaRegTrashCan className="text-red-500 cursor-pointer" />
       </Button>
     </div>
