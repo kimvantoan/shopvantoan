@@ -1,5 +1,5 @@
 import React from "react";
-import InforDelivery from "./inforDelivery";
+import InforDelivery from "./InforDelivery";
 import CheckoutSummary from "./CheckoutSummary";
 import { Separator } from "@/components/ui/separator";
 

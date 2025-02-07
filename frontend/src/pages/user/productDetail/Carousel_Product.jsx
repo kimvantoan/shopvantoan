@@ -1,9 +1,9 @@
 import formatPrice from "@/utils/FormatPrice";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { FaHeart } from "react-icons/fa";
 import { CiShare2 } from "react-icons/ci";
 import { FaStar } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
-import { FaRegHeart } from "react-icons/fa";
 import {
   Select,
   SelectContent,
@@ -31,8 +31,14 @@ import { useAuthStore } from "@/stores/authStore";
 import { toast } from "sonner";
 import { useParams } from "react-router-dom";
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import { useWishStore } from "@/stores/wishStore";
+import { useReviewStore } from "@/stores/reviewStore";
 const Carousel_Product = () => {
   const { product } = useProductStore();
+  const { user } = useAuthStore();
+  const { addToCart, loading } = useCartStore();
+  const { addWish, wishes } = useWishStore();
+  const {reviews} = useReviewStore();
   const { id } = useParams();
   const [data, setdata] = useState({
     productId: id,
@@ -40,7 +46,6 @@ const Carousel_Product = () => {
     quantity: 1,
     size: "",
   });
-  const { user } = useAuthStore();
 
   const addToCartHandler = async (e) => {
     e.preventDefault();
@@ -51,7 +56,17 @@ const Carousel_Product = () => {
       toast.success("Đã thêm sản phẩm vào giỏ hàng");
     }
   };
-  const { addToCart, loading } = useCartStore();
+  const addWishHandler = async (e) => {
+    e.preventDefault();
+    if (!user) {
+      toast("Vui lòng đăng nhập");
+    } else {
+      await addWish({ productId: id });
+    }
+  };
+  const isWish = wishes.some((item) => item.productId._id === id);
+  console.log(product);
+  
   return (
     <div
       className="flex items-start gap-32 mt-10"
@@ -99,8 +114,8 @@ const Carousel_Product = () => {
         </div>
         <div className="flex items-center gap-2 text-gray-600">
           <FaStar className="text-yellow-500" />
-          <p>4.2 -</p>
-          <p>54 Đánh giá</p>
+          <p>{product?.avgRate.toFixed(1)} -</p>
+          <p>{reviews?.length} Đánh giá</p>
         </div>
         <div className="flex gap-2 items-center border-b pb-3">
           <span className="text-xl text-red-500">
@@ -111,7 +126,7 @@ const Carousel_Product = () => {
             {-percentDis(product?.oldPrice, product?.price)}%
           </span>
         </div>
-        <form onSubmit={addToCartHandler} className="flex flex-col gap-3">
+        <form className="flex flex-col gap-3">
           <div>
             <h3 className="font-semibold mb-2">Màu sắc</h3>
             <Select onValueChange={(e) => setdata({ ...data, color: e })}>
@@ -161,7 +176,7 @@ const Carousel_Product = () => {
               <LoadingButton loading className="w-full"></LoadingButton>
             ) : (
               <Button
-                type="submit"
+                onClick={addToCartHandler}
                 className="w-full"
                 disabled={data.color === "" || data.size === ""}
               >
@@ -173,11 +188,15 @@ const Carousel_Product = () => {
                 />
               </Button>
             )}
+            <Button
+              onClick={addWishHandler}
+              variant="ghost"
+              className={`${isWish ? "text-red-500 border-red-500" : ""}`}
+            >
+              <FaHeart/>
+            </Button>
           </div>
         </form>
-        <Button variant="outline" className="border-black ">
-          Thêm sản phẩm yêu thích <FaRegHeart />
-        </Button>
       </div>
     </div>
   );

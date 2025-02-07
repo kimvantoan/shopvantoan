@@ -4,9 +4,8 @@ export const useFillterStore = create((set) => ({
   selectedCategories: [],
   selectedSizes: [],
   selectedPrices: [],
-  selectedBrand: [],
+  selectedSize: [],
   selectedStar: [],
-
   handleStar: (value) => {
     set((state) => ({
       selectedStar: state.selectedStar.includes(value)
@@ -30,9 +29,9 @@ export const useFillterStore = create((set) => ({
   },
   handleBrandChange: (value) => {
     set((state) => ({
-      selectedBrand: state.selectedBrand.includes(value)
-        ? state.selectedBrand.filter((item) => item !== value)
-        : [...state.selectedBrand, value],
+      selectedSize: state.selectedSize.includes(value)
+        ? state.selectedSize.filter((item) => item !== value)
+        : [...state.selectedSize, value],
     }));
   },
 }));

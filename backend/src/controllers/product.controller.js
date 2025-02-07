@@ -1,6 +1,6 @@
 import Product from "../models/product.model.js";
 import cloudinary from "cloudinary";
-
+import removeAccents from "remove-accents";
 const createProduct = async (req, res) => {
   try {
     const images = req.files;
@@ -21,27 +21,114 @@ const createProduct = async (req, res) => {
   }
 };
 
-const getAllProducts = async (req, res) => {
-  const { page = 1, limit = 2 } = req.query;
+const getProducts = async (req, res) => {
+  const {
+    page = 1,
+    limit = 3,
+    q,
+    category,
+    price,
+    size,
+    star,
+    sort,
+  } = req.query;
+  // console.log(typeof price);
+  // console.log(price);
+
   try {
-    const products = await Product.find()
+    let sortOptions = {};
+    if (sort) {
+      if (sort === "newest") {
+        sortOptions.createdAt = -1;
+      } else if (sort === "oldToNew") {
+        sortOptions.createdAt = 1;
+      } else if (sort === "lowToHigh") {
+        sortOptions.price = 1;
+      } else if (sort === "highToLow") {
+        sortOptions.price = -1;
+      }
+    }
+
+    let query = {};
+    if (q) {
+      query.name = {
+        $regex: q,
+        $options: "i",
+      };
+    }
+    if (category) {
+      query.category = { $in: category };
+    }
+    if (size) {
+      query.sizes = { $in: size };
+    }
+    if (star) {
+      const starCoditons = star.map((item) => {
+        const minStar = parseInt(item);
+        return {
+          avgRate: {
+            $gte: minStar,
+            $lt: minStar + 1,
+          },
+        };
+      });
+      query = {
+        ...query,
+        $or: starCoditons,
+      };
+    }
+    // console.log(
+    //  typeof price ==="string" ? [price] : price.map((range) => {
+    //     return range
+    //     // const [minPrice, maxPrice] = range.split("-").map((p) => parseFloat(p));
+    //     // return {
+    //     //   minPrice,
+    //     //   maxPrice,
+    //     // };
+    //   })
+    // );
+
+    if (price) {
+      const priceConditions = typeof price ==="string" ? [price] :price.map((range) => {
+        const [minPrice, maxPrice] = range.split("-").map((p) => parseFloat(p));
+        return {
+          price: {
+            $gte: minPrice,
+            $lte: maxPrice,
+          },
+        };
+      });
+      query = {
+        ...query,
+        $or: priceConditions,
+      };
+    }
+
+    const products = await Product.find(query)
       .populate("category")
-      .sort({ createdAt: -1 })
+      .sort(sortOptions)
       .skip((page - 1) * limit)
       .limit(limit);
 
-    const count = await Product.countDocuments();
+    if (sort === "aToZ" || sort === "zToA") {
+      products.sort((a, b) => {
+        const nameA = removeAccents(a.name || "").toLowerCase();
+        const nameB = removeAccents(b.name || "").toLowerCase();
+        return sort === "aToZ"
+          ? nameA.localeCompare(nameB)
+          : nameB.localeCompare(nameA);
+      });
+    }
+
+    const count = await Product.countDocuments(query);
     const totalPages = Math.ceil(count / limit);
     res.status(200).json({
       products,
-      pagination: {
-        page,
-        limit,
-        totalPages,
-        totalCount: count,
-      },
+      totalPages,
+      currentPage: page,
     });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: err.message });
   }
 };
@@ -65,8 +152,6 @@ const updateProduct = async (req, res) => {
     const imageUrls = [];
 
     const oldProduct = await Product.findById(id);
-    console.log(oldProduct.images);
-
     if (oldProduct.images) {
       await Promise.all(
         oldProduct.images.map(async (image) => {
@@ -125,7 +210,7 @@ const deleteProduct = async (req, res) => {
 
 export {
   createProduct,
-  getAllProducts,
+  getProducts,
   getProductById,
   updateProduct,
   deleteProduct,

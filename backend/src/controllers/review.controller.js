@@ -1,31 +1,13 @@
+import Product from "../models/product.model.js";
 import Review from "../models/review.model.js";
-import Order from "../models/order.model.js";
 export const createReview = async (req, res) => {
   const userId = req.user.id;
-  const { orderId, productId } = req.body;
-
-  const order = await Order.findOne({ _id: orderId, status: "Đã hoàn thành" });
-
   try {
-    if (!order) {
-      return res.status(404).json({ message: "Order not found" });
-    }
+    const review = await Review.create({ ...req.body, userId });
 
-    const review = await Review.findOne({ orderId, productId });
-
-    if (review) {
-      return res.status(400).json({ message: "sản phẩn đã được đánh giá" });
-    } else {
-      const newReview = new Review({
-        userId,
-        ...req.body,
-      });
-      await newReview.save();
-      res.status(201).json(newReview);
-    }
-    res.status(201).json(review);
+    res.status(201).json({ review });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.log(error);
   }
 };
 
@@ -52,18 +34,24 @@ export const getMyReview = async (req, res) => {
 export const getReviewByProduct = async (req, res) => {
   const { page = 1, limit = 5 } = req.query;
   try {
-    const review = await Review.find({ productId: req.params.id })
+    const reviews = await Review.find({ productId: req.params.id })
       .populate("userId")
+      .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit);
+    const product = await Product.findById(req.params.id);
+    product.avgRate =
+      reviews.reduce((total, review) => total + review.star, 0) /
+      reviews.length;
+    await product.save();
 
-    const count = review.length;
+    const count = reviews.length;
     const totalPages = Math.ceil(count / limit);
 
-    if (!review) return res.status(404).json({ message: "Review not found" });
+    if (!reviews) return res.status(404).json({ message: "Review not found" });
 
     res.status(200).json({
-      review,
+      reviews,
       pagination: { page, limit, totalPages, totalCount: count },
     });
   } catch (error) {

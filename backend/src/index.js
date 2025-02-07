@@ -15,29 +15,30 @@ import wishRoutes from "./routes/wish.route.js";
 
 import connectDB from "./configs/db.js";
 import connectCloudinary from "./configs/cloudinary.js";
+import bodyParser from "body-parser";
 
 connectDB();
 connectCloudinary();
 const app = express();
-app.use(cors(
-  {
+app.use(
+  cors({
     origin: "http://localhost:5173",
-    credentials: true
-  }
-));
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/product", productRoutes);
-app.use("/api/category",categoryRotes);
+app.use("/api/category", categoryRotes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/address", addressRoutes);
 app.use("/api/order", orderRoutes);
 app.use("/api/review", reviewRoutes);
 app.use("/api/wish", wishRoutes);
-
 
 app.listen(process.env.PORT, () => {
   console.log(`Server started on port ${process.env.PORT}`);

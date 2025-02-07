@@ -1,13 +1,18 @@
 import PageTitle from "@/components/PageTitle";
 import LayoutProfile from "@/layouts/userLayout/LayoutProfile";
-import React from "react";
+import React, { useEffect } from "react";
 import WishItem from "./WishItem";
+import { useWishStore } from "@/stores/wishStore";
 
 const Wishlist = () => {
   const breadcrumbData = [
     { label: "Trang chủ", href: "/" },
     { label: "Yêu thích", href: "/wishlist" },
   ];
+  const { wishes, getWish } = useWishStore();
+  useEffect(() => {
+    getWish();
+  }, []);
   return (
     <div>
       <PageTitle pagetitle="Wishlist" crumb={breadcrumbData} />
@@ -15,9 +20,9 @@ const Wishlist = () => {
         <h2 className="mb-5 font-semibold">Yêu thích</h2>
 
         <div className="flex flex-col gap-3">
-          <WishItem />
-          <WishItem />
-          <WishItem />
+          {wishes.map((wish) => (
+            <WishItem key={wish._id} wish={wish.productId} />
+          ))}
         </div>
       </LayoutProfile>
     </div>

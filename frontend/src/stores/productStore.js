@@ -1,28 +1,27 @@
 import axios from "../lib/axios";
 import { create } from "zustand";
-import { produce } from "immer";
+import { current, produce } from "immer";
 export const useProductStore = create((set) => ({
   products: null,
   product: null,
   loading: false,
   error: null,
-  pagination: {
-    page: 0,
-    limit: 0,
-    totalPages: 0,
-    totalCount: 0,
-  },
-  getAllProduct: async (page = 1, limit = 9) => {
+  totalPages: 0,  
+  currentPage: 1,
+
+  getProducts: async (params) => {
     set({ loading: true });
     try {
-      const res = await axios.get(`/api/product?page=${page}&limit=${limit}`);
+      const res = await axios.get(`/api/product`,{params});
       set({
         products: res.data.products,
         loading: false,
-        pagination: res.data.pagination,
+        totalPages: res.data.totalPages,
+        currentPage: res.data.currentPage
       });
     } catch (error) {
       set({
+        products: [],
         error: error.message,
         loading: false,
       });

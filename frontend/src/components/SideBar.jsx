@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { Button } from "./ui/button";
@@ -14,43 +14,31 @@ const SideBar = () => {
   const account = [
     {
       title: "Đơn hàng",
-      icon: <AiOutlineInbox size={22}/>,
+      icon: <AiOutlineInbox size={22} />,
       path: "/orders",
     },
     {
       title: "Yêu thích",
-      icon: <FaRegHeart size={20}/>,
+      icon: <FaRegHeart size={20} />,
       path: "/wishlist",
     },
     {
       title: "Địa chỉ",
-      icon: <LiaShippingFastSolid size={20}/>,
+      icon: <LiaShippingFastSolid size={20} />,
       path: "/address",
     },
     {
       title: "Tài khoản",
-      icon: <FaRegUser size={19}/>,
+      icon: <FaRegUser size={19} />,
       path: "/account",
     },
   ];
-  const {user,logout} = useAuthStore();
+  const { user, logout } = useAuthStore();
+
   return (
     <div className="flex flex-col border-2 w-[300px] h-fit">
-      <div className="flex items-center gap-2 border-b-2 pb-2">
-        <div className="self-center relative ">
-          <img
-            src={user?.avatar}
-            className="size-20 rounded-full"
-            alt=""
-          />
-          <Label
-            htmlFor="file"
-            className="absolute flex items-center justify-center bottom-0 right-0 cursor-pointer border-2 border-white text-white p-1  rounded-full  bg-black"
-          >
-            <IoCameraReverseOutline className="size-4" />
-            <input type="file" id="file" className="hidden" />
-          </Label>
-        </div>
+      <div className="flex items-center gap-2 border-b-2 p-2">
+        <img src={user.avatar} className="size-20 rounded-full" alt="" />
         <div className="text-start">
           <p className="flex gap-1 items-center">
             Xin chào <FaHandSparkles className="text-yellow-500" />
@@ -72,7 +60,11 @@ const SideBar = () => {
         </NavLink>
       ))}
       <div>
-        <Button onClick={logout} variant="ghost" className="text-red-500 hover:bg-white text-start text-sm p-4">
+        <Button
+          onClick={logout}
+          variant="ghost"
+          className="text-red-500 hover:bg-white text-start text-sm p-4"
+        >
           <MdLogout size={20} /> Đăng xuất
         </Button>
       </div>

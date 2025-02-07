@@ -3,9 +3,9 @@ import { useProductStore } from "@/stores/productStore";
 import React, { useEffect } from "react";
 
 const Similar = () => {
-  const { products, getAllProduct } = useProductStore();
+  const { products, getProducts } = useProductStore();
   useEffect(() => {
-    getAllProduct(1,5);
+    getProducts({limit:5});
   }, []);
   return (
     <div>

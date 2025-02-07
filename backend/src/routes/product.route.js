@@ -2,7 +2,7 @@ import { Router } from "express";
 const router = Router();
 import {
   createProduct,
-  getAllProducts,
+  getProducts,
   getProductById,
   updateProduct,
   deleteProduct,
@@ -11,7 +11,7 @@ import upload from "../middleware/multer.js";
 import { adminmiddleware } from "../middleware/auth.middleware.js";
 
 router.post("/", adminmiddleware, upload.array("images", 10), createProduct);
-router.get("/", getAllProducts);
+router.get("/", getProducts);
 router.get("/:id", getProductById);
 router.patch(
   "/:id",

@@ -15,6 +15,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import UserLayout from "@/layouts/userLayout/UserLayout";
 import { useAuthStore } from "@/stores/authStore";
 import Checkout from "@/pages/user/checkout/Checkout";
+import { Search } from "@/pages/user/search/Search";
 
 const AuthenticatedUser = ({ children }) => {
   const { user } = useAuthStore();
@@ -77,12 +78,16 @@ export const router = createBrowserRouter([
         element: <Account />,
       },
       {
-        path: "/shop/:category",
+        path: "/shop",
         element: <Listing />,
       },
       {
         path: "/checkout",
         element: <Checkout />,
+      },
+      {
+        path: "/search",
+        element: <Search />,
       },
     ],
   },

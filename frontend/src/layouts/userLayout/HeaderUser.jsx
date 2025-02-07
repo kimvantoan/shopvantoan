@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "../../assets/Logo.jpg";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { IoMdSearch } from "react-icons/io";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import {
@@ -16,12 +16,11 @@ import { FaRegUser } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { IoIosLogOut } from "react-icons/io";
 import { LiaShippingFastSolid } from "react-icons/lia";
-import ShopNav from "@/components/ShopNav";
 import { useAuthStore } from "@/stores/authStore";
 import { useCartStore } from "@/stores/cartStore";
 const HeaderUser = () => {
   const { user, logout } = useAuthStore();
-  const { cart} = useCartStore();
+  const { cart } = useCartStore();
   const haveUser = [
     {
       title: "Đơn hàng",
@@ -64,7 +63,9 @@ const HeaderUser = () => {
           </Link>
         </li>
         <li>
-          <ShopNav />
+          <Link to="/shop" className={""}>
+            SẢN PHẨM
+          </Link>
         </li>
         <li>
           <Link to="/" className={""}>
@@ -72,12 +73,10 @@ const HeaderUser = () => {
           </Link>
         </li>
       </ul>
-
       <div className="flex gap-6 items-center">
-        <label className="input input-bordered flex items-center">
-          <input type="text" placeholder="Tìm kiếm" />
-          <IoMdSearch size={26} className="text-gray-500" cursor={"pointer"} />
-        </label>
+        <Link to={"/search"}>
+          <IoMdSearch size={28} className="text-gray-500" cursor={"pointer"} />
+        </Link>
         <DropdownMenu>
           <DropdownMenuTrigger>
             <FaRegUser size={23} className="text-gray-500" cursor={"pointer"} />

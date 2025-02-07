@@ -41,7 +41,7 @@ export const getUserById = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "không tìm thấy người dùng" });
     }
-    res.status(200).json(user);
+    res.status(200).json({ user });
   } catch (error) {
     res
       .status(500)
@@ -54,25 +54,29 @@ export const updateUser = async (req, res) => {
   const updates = req.body;
   const userId = req.user.id;
   const role = req.user.role;
+
   if (id !== userId && role !== "admin") {
     return res
       .status(403)
       .json({ message: "Bạn không có quyền truy cập người dùng này" });
   }
   try {
-    const result = await cloudinary.uploader.upload(req.file.path);
-    updates.avatar = result.secure_url;
-    const updatedUser = await User.findByIdAndUpdate(id, updates, {
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      updates.avatar = result.secure_url;
+    }
+    const user = await User.findByIdAndUpdate(id, updates, {
       new: true,
     });
-    if (!updatedUser) {
+
+    if (!user) {
       return res.status(404).json({ message: "không tìm thấy người dùng" });
     }
-    res.status(200).json(updatedUser);
+    res.status(200).json({ user});
   } catch (error) {
     res
       .status(400)
-      .json({ message: "Error updating user", error: error.message });
+      .json({ message: "Cập nhật thất bại"});
   }
 };
 

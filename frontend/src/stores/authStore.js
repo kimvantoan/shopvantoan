@@ -3,7 +3,7 @@ import axiosInstance from "../lib/axios";
 import { createJSONStorage, persist } from "zustand/middleware";
 export const useAuthStore = create()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       loading: false,
       signup: async (data) => {
@@ -36,6 +36,25 @@ export const useAuthStore = create()(
           location.replace("/login");
         } catch (error) {
           console.log(error);
+        }
+      },
+      getUserbyId: async (id) => {
+        try {
+          set({ loading: true });
+          const res = await axiosInstance.get(`/api/user/${id}`);
+          set({ user: res.data.user, loading: false });
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      updateUser: async (data) => {
+        try {
+          set({ loading: true });
+          const res=await axiosInstance.patch(`/api/user/${data.get("_id")}`, data);
+          set({ user: res.data.user });
+          set({ loading: false });
+        } catch (error) {
+          set({ loading: false });
         }
       },
     }),

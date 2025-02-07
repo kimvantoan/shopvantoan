@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -6,12 +6,19 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useFillterStore } from "@/stores/FillterStore";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import { FaStar } from "react-icons/fa";
-const Fillter = () => {
-  const filler = {
+import { useCategoryStore } from "@/stores/categoryStore";
+import { useSearchParams } from "react-router-dom";
+import { useProductStore } from "@/stores/productStore";
+const Filter = () => {
+  const { getCategories, categories } = useCategoryStore();
+  const { getProducts } = useProductStore();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const filter = {
     priceRanges: [
       {
         label: "Dưới 100.000đ",
@@ -34,53 +41,74 @@ const Fillter = () => {
         max: 1000000,
       },
     ],
-    categories: ["Áo thun", "Áo sơ mi", "Áo khoác"],
-    brand: ["Nike", "Adidas", "Puma"],
-    star: [5, 4, 3, 2, 1],
+    categories,
+    size: ["XS", "S", "M", "L", "XL", "XXL"],
+    star: ["5", "4", "3", "2", "1"],
   };
-  const {
-    selectedCategories,
-    handleCategoryChange,
-    handlePriceChange,
-    selectedPrices,
-    selectedBrand,
-    handleStar,
-    selectedStar,
-    handleBrandChange,
-    reset,
-  } = useFillterStore();
+  const handle = (name, value) => {
+    const params = new URLSearchParams(searchParams);
+    const curValues = params.getAll(name);
+    if (curValues.includes(value)) {
+      const newValue = curValues.filter((item) => item !== value);
+      params.delete(name);
+      newValue.forEach((item) => params.append(name, item));
+    } else {
+      params.append(name, value);
+    }
+    setSearchParams(params);
+  };
 
   useEffect(() => {
-    console.log(
-      selectedCategories,
-      selectedPrices,
-      selectedBrand,
-      selectedStar
+    getCategories();
+  }, []);
+
+  const selectedCategories = searchParams.getAll("category");
+  const selectedSizes = searchParams.getAll("size");
+  const selectedPrices = searchParams.getAll("price");
+  const selectedStars = searchParams.getAll("star");
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    selectedCategories.forEach((category) =>
+      params.append("category", category)
     );
-  }, [selectedCategories, selectedPrices, selectedBrand, selectedStar]);
+    selectedSizes.forEach((size) => params.append("size", size));
+    selectedPrices.forEach((price) => params.append("price", price));
+    selectedStars.forEach((star) => params.append("star", star));
+    if (!params.has("sort")) {
+      params.set("sort", "newest");
+    }
+    getProducts(params);
+  }, [searchParams]);
+
   return (
     <div>
-      <Accordion type="multiple" className="w-[250px]">
+      <Accordion
+        defaultValue={["item-1", "item-2", "item-3", "item-4"]}
+        type="multiple"
+        className="w-[250px]"
+      >
         <AccordionItem value="item-1">
           <AccordionTrigger>Danh mục</AccordionTrigger>
           <AccordionContent className="space-y-3">
-            {filler.categories.map((item) => (
+            {categories.map((item) => (
               <Label
                 style={{ userSelect: "none" }}
                 className="flex items-center gap-2"
               >
                 <Checkbox
-                  id={item}
-                  onCheckedChange={() => handleCategoryChange(item)}
-                  value={item}
-                  checked={selectedCategories.includes(item)}
+                  onCheckedChange={() => handle("category", item._id)}
+                  id={item.name}
+                  value={item.name}
+                  className="h-4 w-4"
+                  checked={searchParams.getAll("category").includes(item._id)}
                 />
-                <label
-                  htmlFor={item}
+                <Label
+                  htmlFor={item.name}
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  {item}
-                </label>
+                  {item.name}
+                </Label>
               </Label>
             ))}
           </AccordionContent>
@@ -89,18 +117,21 @@ const Fillter = () => {
           <AccordionTrigger>Giá</AccordionTrigger>
           <AccordionContent className="space-y-3">
             <div className="grid gap-2">
-              {filler.priceRanges.map((item) => (
+              {filter.priceRanges.map((item) => (
                 <Label
                   style={{ userSelect: "none" }}
                   className="flex items-center gap-2"
                 >
                   <Checkbox
                     onCheckedChange={() =>
-                      handlePriceChange(`${item.min}-${item.max}`)
+                      handle("price", `${item.min}-${item.max}`)
                     }
+                    id={item.label}
                     className="h-4 w-4 text-primary accent-slate-950"
                     value={`${item.min}-${item.max}`}
-                    checked={selectedPrices.includes(`${item.min}-${item.max}`)}
+                    checked={searchParams
+                      .getAll("price")
+                      .includes(`${item.min}-${item.max}`)}
                   />
                   <Label htmlFor={item.label}>{item.label}</Label>
                 </Label>
@@ -109,18 +140,18 @@ const Fillter = () => {
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-3">
-          <AccordionTrigger>Thương hiệu</AccordionTrigger>
+          <AccordionTrigger>Kích thước</AccordionTrigger>
           <AccordionContent className="space-y-3">
-            {filler.brand.map((item) => (
+            {filter.size.map((item) => (
               <Label
                 style={{ userSelect: "none" }}
                 className="flex items-center gap-2"
               >
                 <Checkbox
                   id={item}
-                  onCheckedChange={() => handleBrandChange(item)}
+                  onCheckedChange={() => handle("size", item)}
                   value={item}
-                  checked={selectedBrand.includes(item)}
+                  checked={searchParams.getAll("size").includes(item)}
                 />
                 <label
                   htmlFor={item}
@@ -135,16 +166,16 @@ const Fillter = () => {
         <AccordionItem value="item-4">
           <AccordionTrigger>Đánh giá</AccordionTrigger>
           <AccordionContent className="space-y-3">
-            {filler.star.map((item) => (
+            {filter.star.map((item) => (
               <Label
                 style={{ userSelect: "none" }}
                 className="flex items-center gap-2"
               >
                 <Checkbox
                   id={item}
-                  onCheckedChange={() => handleStar(item)}
+                  onCheckedChange={() => handle("star", item)}
                   value={item}
-                  checked={selectedStar.includes(item)}
+                  checked={searchParams.getAll("star").includes(item)}
                 />
                 <label
                   htmlFor={item}
@@ -162,13 +193,10 @@ const Fillter = () => {
         </AccordionItem>
       </Accordion>
       <div className="flex gap-2 mt-5 ">
-        <Button>Áp dụng lọc</Button>
-        <Button onClick={reset} variant="outline">
-          Làm mới
-        </Button>
+        <Button>Làm mới</Button>
       </div>
     </div>
   );
 };
 
-export default Fillter;
+export default Filter;

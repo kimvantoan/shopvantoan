@@ -20,16 +20,10 @@ const createCategory = async (req, res) => {
 };
 
 const getAllCategories = async (req, res) => {
-  const { page = 1, limit = 10 } = req.query;
   try {
-    const categories = await Category.find()
-      .skip((page - 1) * limit)
-      .limit(limit);
-    const count = await Category.countDocuments();
-    const totalPages = Math.ceil(count / limit);
-    res.json({
+    const categories = await Category.find();
+    res.status(200).json({
       categories,
-      pagination: { page, limit, totalPages, totalCount: count },
     });
   } catch (err) {
     res.status(500).json({ error: err.message });

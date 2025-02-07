@@ -10,6 +10,7 @@ const productSchema = new mongoose.Schema(
     images: { type: Array, required: true },
     sizes: { type: Array, required: true ,trim: true},
     colors: { type: Array, required: true ,trim: true},
+    avgRate: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

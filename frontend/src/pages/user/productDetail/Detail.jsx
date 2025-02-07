@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { FaStar } from "react-icons/fa";
@@ -11,9 +11,34 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { useProductStore } from "@/stores/productStore";
+import { Button } from "@/components/ui/button";
+import { useReviewStore } from "@/stores/reviewStore";
+import { useParams } from "react-router-dom";
+import formatDate from "@/utils/FormatDate";
+import { LoadingButton } from "@/components/ui/loading-button";
 const Detail = () => {
-  const {product} = useProductStore();
+  const { product } = useProductStore();
+  const { createReview, getReviewsbyProduct, reviews, loading } =
+    useReviewStore();
+  const { id } = useParams();
+  const [review, setReview] = React.useState({
+    star: "5",
+    comment: "",
+    productId: id,
+  });
+  const handleReview = (e) => {
+    e.preventDefault();
+    createReview(review).then(() => {
+      getReviewsbyProduct(id);
+    });
+  };
+
+  useEffect(() => {
+    getReviewsbyProduct(id);
+  }, []);
   return (
     <Tabs defaultValue="Details" className="w-full">
       <TabsList className="grid grid-cols-2 w-1/2">
@@ -26,46 +51,49 @@ const Detail = () => {
       </TabsList>
       <TabsContent value="Details">
         <h3 className="font-semibold mb-4">Chi tiết sản phẩm</h3>
-        <p className="text-sm">
-          {product?.description}
-        </p>
+        <p className="text-sm">{product?.description}</p>
       </TabsContent>
       <TabsContent value="Reviews">
-        <h3 className="font-semibold mb-4">Khách hàng đánh giá</h3>
+        <h3 className="font-semibold">Đánh giá</h3>
         <div className="flex flex-col">
-          <div className="flex flex-col py-7 border-b mb-4">
-            <div className="flex gap-3">
-              <img
-                src="https://avatar.iran.liara.run/public"
-                alt=""
-                className="size-16 rounded-full place-self-center"
-              />
-              <div className="flex flex-col justify-between py-1">
-                <p className="font-medium">Username</p>
-                <div className="flex justify-self-end">
-                  {[...Array(5)].map((_, index) => (
-                    <span
-                      key={index}
-                      className={`text-lg ${
-                        index < 4 ? "text-yellow-500" : "text-gray-300"
-                      }`}
-                    >
-                      <FaStar />
-                    </span>
-                  ))}
+          {reviews?.map((review) => (
+            <div className="flex flex-col py-3 border-b">
+              <div className="flex gap-3">
+                <img
+                  src={review.userId.avatar}
+                  alt=""
+                  className="size-16 rounded-full place-self-center"
+                />
+                <div className="flex flex-col justify-between py-1">
+                  <p className="font-medium">{review.userId.fullname}</p>
+                  <div className="flex justify-self-end">
+                    {[...Array(5)].map((_, index) => (
+                      <span
+                        key={index}
+                        className={`text-lg ${
+                          index < review.star
+                            ? "text-yellow-500"
+                            : "text-gray-300"
+                        }`}
+                      >
+                        <FaStar />
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="flex flex-col break-words mt-3 space-y-1">
-              <p className="text-sm">
-                wReviewReviewReviewReviewReviewReviewReviewRevieReviewReviewReviewReviewReviewReviewReviewReviewReviewReview
-              </p>
-              <span className="text-sm text-gray-400">
-                Review on <span className=" text-black">01/01/2023</span>
-              </span>
+              <div className="flex flex-col break-words mt-3 space-y-1">
+                <p className="text-sm">{review.comment}</p>
+                <span className="text-xs text-gray-400">
+                  Ngày đánh giá{" "}
+                  <span className=" text-black">
+                    {formatDate(review.createdAt)}
+                  </span>
+                </span>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
         <Pagination>
           <PaginationContent>
@@ -83,6 +111,39 @@ const Detail = () => {
             </PaginationItem>
           </PaginationContent>
         </Pagination>
+        <form onSubmit={handleReview}>
+          <h3 className="font-semibold mb-4">Đánh giá của bạn</h3>
+          <div className="rating">
+            {[...Array(5)].map((_, index) => (
+              <input
+                type="radio"
+                name="rating-2"
+                className="mask mask-star-2 bg-orange-400"
+                key={index}
+                value={index + 1}
+                checked={review.star === (index + 1).toString()}
+                onChange={(e) => setReview({ ...review, star: e.target.value })}
+              />
+            ))}
+          </div>
+          <div className="grid w-full gap-2 mt-2">
+            <Label htmlFor="message">Nội dung</Label>
+            <Textarea
+              onChange={(e) =>
+                setReview({ ...review, comment: e.target.value })
+              }
+              placeholder="Viết đánh giá tại đây"
+              id="message"
+            />
+          </div>
+          {loading ? (
+            <LoadingButton className="mt-4 " loading></LoadingButton>
+          ) : (
+            <Button type="submit" className="mt-4">
+              Đánh giá
+            </Button>
+          )}
+        </form>
       </TabsContent>
     </Tabs>
   );
