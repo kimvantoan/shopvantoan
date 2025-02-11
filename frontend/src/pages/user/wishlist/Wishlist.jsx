@@ -18,12 +18,20 @@ const Wishlist = () => {
       <PageTitle pagetitle="Wishlist" crumb={breadcrumbData} />
       <LayoutProfile>
         <h2 className="mb-5 font-semibold">Yêu thích</h2>
-
-        <div className="flex flex-col gap-3">
-          {wishes.map((wish) => (
-            <WishItem key={wish._id} wish={wish.productId} />
-          ))}
-        </div>
+        {wishes.length > 0 ? (
+          <div className="flex flex-col gap-3">
+            {wishes.map((wish) => (
+              <WishItem key={wish._id} wish={wish.productId} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center">
+            <h2 className="text-[50px]">💔</h2>
+            <h2 className="text-xl text-red-500">
+              Bạn chưa có sản phẩm yêu thích nào 😥
+            </h2>
+          </div>
+        )}
       </LayoutProfile>
     </div>
   );

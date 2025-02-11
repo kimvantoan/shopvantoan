@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import axiosInstance from "../lib/axios";
-
+import { toast } from "sonner";
 export const useOrderStore = create((set) => ({
   orders: [],
   loading: false,
@@ -17,8 +17,9 @@ export const useOrderStore = create((set) => ({
   createOrder: async (data) => {
     set({ loading: true });
     try {
-      await axiosInstance.post("/api/order", data);
+      const res = await axiosInstance.post("/api/order", data);
       set({ loading: false });
+      toast.success(res.data.message)
     } catch (error) {
       set({ error: error.message, loading: false });
     }

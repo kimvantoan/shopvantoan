@@ -1,19 +1,19 @@
 import React, { useEffect } from "react";
-import Hero from "./Hero";
 import NewArrivals from "./NewArrivals";
-import Brand from "./Brand";
-import { useProductStore } from "@/stores/productStore";
+import { useCartStore } from "@/stores/cartStore";
+import Slide from "./Slide";
+import { CategoryCarousel } from "./Category";
 
 const Home = () => {
-  const { getProducts } = useProductStore();
+  const { getCart } = useCartStore();
   useEffect(() => {
-    getProducts();
+    getCart()
   }, []);
   return (
     <>
-      <Hero />
+      <Slide />
       <div className="px-44 flex flex-col gap-10">
-        <Brand />
+        <CategoryCarousel/>
         <NewArrivals />
       </div>
     </>

@@ -49,7 +49,6 @@ const Listing = () => {
     },
   ];
   const [searchParams, setSearchParams] = useSearchParams();
-  console.log(totalPages);
   
   const handleSort = (value) => {
     const params = new URLSearchParams(searchParams);

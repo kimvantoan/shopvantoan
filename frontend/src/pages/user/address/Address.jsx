@@ -27,11 +27,24 @@ const Address = () => {
           </DialogTrigger>
           <FormAddress />
         </Dialog>
-        <div className="grid grid-cols-2 gap-3">
-          {addresses.map((address) => (
-            <AddressItem key={address.id} address={address} />
-          ))}
-        </div>
+        {addresses.length > 0 ? (
+          <div className="grid grid-cols-2 gap-3">
+            {addresses.map((address) => (
+              <AddressItem key={address.id} address={address} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center">
+            <img
+              src="/address-not-fould.webp"
+              className="mx-auto size-[350px]"
+              alt=""
+            />
+            <h2 className="text-xl text-red-500">
+              Hãy thêm địa chỉ để mua hàng
+            </h2>
+          </div>
+        )}
       </LayoutProfile>
     </div>
   );

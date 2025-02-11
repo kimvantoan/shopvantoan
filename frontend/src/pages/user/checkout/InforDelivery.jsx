@@ -31,9 +31,6 @@ const InforDelivery = () => {
     paymentMethod: "",
     totalPrice: totalPrice,
   });
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
   return (
     <div className="flex-1 flex flex-col gap-5 px-32">
       <div>
@@ -77,14 +74,14 @@ const InforDelivery = () => {
               nhận hàng
             </Label>
           </div>
-          <Separator />
+          {/* <Separator />
           <div className="flex p-4 items-center space-x-2">
             <RadioGroupItem value="Chuyển khoản qua ngân hàng" id="option-2" />
             <Label htmlFor="option-2" className="flex items-center gap-2">
               <BsBank className="size-7 text-yellow-500" /> Chuyển khoản qua
               ngân hàng
             </Label>
-          </div>
+          </div> */}
         </RadioGroup>
       </div>
       <div className="flex justify-between mt-5">
@@ -94,7 +91,7 @@ const InforDelivery = () => {
         ) : (
           <Button
             onClick={() => {
-              createOrder(data), toast.success("Thanh toán thành công");
+              createOrder(data);
             }}
             disabled={!data.shippingAddress || !data.paymentMethod}
             className="w-fit"

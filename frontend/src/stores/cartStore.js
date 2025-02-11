@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import axiosInstance from "../lib/axios";
+import { toast } from "sonner"
 
 export const useCartStore = create(
   persist(
@@ -15,7 +16,7 @@ export const useCartStore = create(
           const res = await axiosInstance.get("/api/cart");
           set({ cart: res.data.cart.products });
           get().handleTotal();
-          set({ loading: false });
+          set({ loading: false })
         } catch (error) {
           set({ error: error.message, loading: false });
         }
@@ -24,10 +25,11 @@ export const useCartStore = create(
       addToCart: async (data) => {
         set({ loading: true });
         try {
-          await axiosInstance.post("/api/cart/add", data);
+          const res = await axiosInstance.post("/api/cart/add", data);
           get().getCart();
           get().handleTotal();
           set({ loading: false });
+          toast.success(res.data.message)
         } catch (error) {
           set({ error: error.message, loading: false });
         }

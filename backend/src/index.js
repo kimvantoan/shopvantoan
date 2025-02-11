@@ -22,7 +22,7 @@ connectCloudinary();
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://shopvantoan.onrender.com", //https://shopvantoan.onrender.com
     credentials: true,
   })
 );

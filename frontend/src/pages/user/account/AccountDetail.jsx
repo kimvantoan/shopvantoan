@@ -21,8 +21,8 @@ const AccountDetail = () => {
     formData.append("_id", data._id);
     formData.append("fullname", data.fullname);
     await updateUser(formData);
-    // status?toast.success(message):toast.error(message);
   };
+  
   return (
     <div>
       <h2 className="font-semibold text-xl">Thông tin tài khoản</h2>

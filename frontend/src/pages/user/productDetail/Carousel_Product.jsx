@@ -1,6 +1,6 @@
 import formatPrice from "@/utils/FormatPrice";
 import React, { useState } from "react";
-import { FaHeart } from "react-icons/fa";
+import { FaRegHeart } from "react-icons/fa";
 import { CiShare2 } from "react-icons/ci";
 import { FaStar } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import { FaHeart } from "react-icons/fa6";
 import {
   Carousel,
   CarouselMainContainer,
@@ -29,7 +29,7 @@ import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { useAuthStore } from "@/stores/authStore";
 import { toast } from "sonner";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useWishStore } from "@/stores/wishStore";
 import { useReviewStore } from "@/stores/reviewStore";
@@ -38,7 +38,7 @@ const Carousel_Product = () => {
   const { user } = useAuthStore();
   const { addToCart, loading } = useCartStore();
   const { addWish, wishes } = useWishStore();
-  const {reviews} = useReviewStore();
+  const { reviews } = useReviewStore();
   const { id } = useParams();
   const [data, setdata] = useState({
     productId: id,
@@ -46,27 +46,36 @@ const Carousel_Product = () => {
     quantity: 1,
     size: "",
   });
+  const navigate = useNavigate();
 
   const addToCartHandler = async (e) => {
     e.preventDefault();
     if (!user) {
-      toast("Vui lòng đăng nhập để mua hàng");
+      toast.info("Vui lòng đăng nhập", {
+        action: {
+          label: "Đăng nhập",
+          onClick: () => navigate("/login"),
+        },
+      });
     } else {
       await addToCart(data);
-      toast.success("Đã thêm sản phẩm vào giỏ hàng");
     }
   };
   const addWishHandler = async (e) => {
     e.preventDefault();
     if (!user) {
-      toast("Vui lòng đăng nhập");
+      toast.info("Vui lòng đăng nhập", {
+        action: {
+          label: "Đăng nhập",
+          onClick: () => navigate("/login"),
+        },
+      });
     } else {
       await addWish({ productId: id });
     }
   };
   const isWish = wishes.some((item) => item.productId._id === id);
-  console.log(product);
-  
+
   return (
     <div
       className="flex items-start gap-32 mt-10"
@@ -102,7 +111,7 @@ const Carousel_Product = () => {
 
       <div className="flex flex-col w-1/2 gap-4">
         <div className="flex justify-between items-center">
-          <h2 className="font-bold text-3xl ">{product?.name}</h2>
+          <h2 className="font-semibold text-2xl ">{product?.name}</h2>
           <i className="p-2 cursor-pointer bg-gray-100 rounded-full">
             <Dialog>
               <DialogTrigger asChild>
@@ -117,8 +126,8 @@ const Carousel_Product = () => {
           <p>{product?.avgRate.toFixed(1)} -</p>
           <p>{reviews?.length} Đánh giá</p>
         </div>
-        <div className="flex gap-2 items-center border-b pb-3">
-          <span className="text-xl text-red-500">
+        <div className="flex gap-2 items-end border-b pb-3">
+          <span className="text-2xl font-semibold text-red-500">
             {formatPrice(product?.price)}
           </span>
           <s className="text-gray-500">{formatPrice(product?.oldPrice)}</s>
@@ -163,13 +172,26 @@ const Carousel_Product = () => {
           </div>
           <div className="flex flex-col">
             <h3 className="font-semibold mb-2">Số lượng</h3>
-            <Input
-              type="number"
-              min={1}
-              defaultValue={1}
-              onChange={(e) => setdata({ ...data, quantity: e.target.value })}
-              className="w-[90px]"
-            />
+            <div className="flex items-center border w-fit p-1 border-red-500">
+              <Button
+                onClick={(e) => {
+                  e.preventDefault();
+                  data.quantity > 1 &&
+                    setdata({ ...data, quantity: data.quantity - 1 });
+                }}
+              >
+                -
+              </Button>
+              <p className="w-[50px] text-center">{data.quantity}</p>
+              <Button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setdata({ ...data, quantity: data.quantity + 1 });
+                }}
+              >
+                +
+              </Button>
+            </div>
           </div>
           <div className="flex gap-3">
             {loading ? (
@@ -188,13 +210,21 @@ const Carousel_Product = () => {
                 />
               </Button>
             )}
-            <Button
-              onClick={addWishHandler}
-              variant="ghost"
-              className={`${isWish ? "text-red-500 border-red-500" : ""}`}
-            >
-              <FaHeart/>
-            </Button>
+            {isWish ? (
+              <FaHeart
+                className="my-auto text-red-500"
+                onClick={addWishHandler}
+                cursor={"pointer"}
+                size={28}
+              />
+            ) : (
+              <FaRegHeart
+                size={28}
+                onClick={addWishHandler}
+                cursor={"pointer"}
+                className="my-auto "
+              />
+            )}
           </div>
         </form>
       </div>

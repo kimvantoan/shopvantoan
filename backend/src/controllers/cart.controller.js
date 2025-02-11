@@ -39,7 +39,7 @@ export const addProductToCart = async (req, res) => {
       }
     }
     await cart.save();
-    res.status(200).json({message: "The product has been added to your cart"});
+    res.status(200).json({message: "Đã thêm sản phẩm vào giỏ hàng", cart});
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

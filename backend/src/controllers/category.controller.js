@@ -1,9 +1,10 @@
 import Category from "../models/category.model.js";
 import Product from "../models/product.model.js";
-
+import cloudinary from "cloudinary";
 const createCategory = async (req, res) => {
   try {
     const { name } = req.body;
+    const image = req.file;
     if (!name) {
       return res.status(400).json({ error: "Điền đầy đủ thông tin" });
     }
@@ -11,7 +12,13 @@ const createCategory = async (req, res) => {
     if (exitcategory) {
       return res.status(400).json({ error: "Danh mục đã tồn tại" });
     }
-    const category = new Category(req.body);
+    const result = await cloudinary.uploader.upload(image.path);
+    const imageURL = {
+      public_id: result.public_id,
+      url: result.secure_url,
+    };
+
+    const category = new Category({ ...req.body, image: imageURL });
     await category.save();
     res.status(201).json(category);
   } catch (err) {
@@ -48,9 +55,23 @@ const updateCategory = async (req, res) => {
       new: true,
       runValidators: true,
     });
+
     if (!category) {
       return res.status(404).json({ error: "Không tìm thấy danh mục" });
     }
+    if (category.image) {
+      await cloudinary.uploader.destroy(category.image.public_id);
+    }
+
+    const image = req.file;
+    const result = await cloudinary.uploader.upload(image.path);
+    const imageURL = {
+      public_id: result.public_id,
+      url: result.secure_url,
+    };
+    category.image = imageURL;
+    await category.save();
+
     res.json(category);
   } catch (err) {
     res.status(400).json({ error: err.message });

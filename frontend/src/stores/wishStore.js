@@ -15,7 +15,6 @@ export const useWishStore = create(
           set({ loading: false });
         } catch (error) {
           set({ loading: false });
-          console.log(error);
         }
       },
       addWish: async (data) => {
@@ -26,11 +25,9 @@ export const useWishStore = create(
           set({ loading: false });
         } catch (error) {
           set({ loading: false });
-          console.log(error);
         }
       },
       removeWish: async (id) => {
-        console.log(id);
         try {
           set({ loading: true });
           await axiosInstance.delete(`/api/wish/${id}`);
@@ -40,7 +37,6 @@ export const useWishStore = create(
             set({ loading: false });
         } catch (error) {
           set({ loading: false });
-          console.log(error);
         }
       },
     }),

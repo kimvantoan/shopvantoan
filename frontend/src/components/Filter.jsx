@@ -45,6 +45,15 @@ const Filter = () => {
     size: ["XS", "S", "M", "L", "XL", "XXL"],
     star: ["5", "4", "3", "2", "1"],
   };
+  const resetFilter = () => {
+    const params = new URLSearchParams(searchParams);
+    params.delete("category");
+    params.delete("size");
+    params.delete("price");
+    params.delete("star");
+    setSearchParams(params);
+  };
+
   const handle = (name, value) => {
     const params = new URLSearchParams(searchParams);
     const curValues = params.getAll(name);
@@ -193,7 +202,7 @@ const Filter = () => {
         </AccordionItem>
       </Accordion>
       <div className="flex gap-2 mt-5 ">
-        <Button>Làm mới</Button>
+        <Button onClick={resetFilter}>Làm mới</Button>
       </div>
     </div>
   );

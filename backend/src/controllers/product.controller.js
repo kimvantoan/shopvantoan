@@ -24,7 +24,7 @@ const createProduct = async (req, res) => {
 const getProducts = async (req, res) => {
   const {
     page = 1,
-    limit = 3,
+    limit = 12,
     q,
     category,
     price,
@@ -32,8 +32,6 @@ const getProducts = async (req, res) => {
     star,
     sort,
   } = req.query;
-  // console.log(typeof price);
-  // console.log(price);
 
   try {
     let sortOptions = {};
@@ -77,16 +75,6 @@ const getProducts = async (req, res) => {
         $or: starCoditons,
       };
     }
-    // console.log(
-    //  typeof price ==="string" ? [price] : price.map((range) => {
-    //     return range
-    //     // const [minPrice, maxPrice] = range.split("-").map((p) => parseFloat(p));
-    //     // return {
-    //     //   minPrice,
-    //     //   maxPrice,
-    //     // };
-    //   })
-    // );
 
     if (price) {
       const priceConditions = typeof price ==="string" ? [price] :price.map((range) => {

@@ -72,7 +72,7 @@ export const updateUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "không tìm thấy người dùng" });
     }
-    res.status(200).json({ user});
+    res.status(200).json({ user , message: "Cập nhật thành công"});
   } catch (error) {
     res
       .status(400)

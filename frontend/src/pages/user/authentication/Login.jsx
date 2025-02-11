@@ -7,18 +7,26 @@ import PageTitle from "@/components/PageTitle";
 import { useAuthStore } from "@/stores/authStore";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { useCartStore } from "@/stores/cartStore";
+import { GoogleLogin } from "@react-oauth/google";
+import { toast } from 'react-toastify';
+
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const { login, loading } = useAuthStore();
   const { getCart } = useCartStore();
+  const { login, loading, googleLogin } = useAuthStore();
   const handleLogin = async (e) => {
     e.preventDefault();
-    await login(formData);
-    await getCart();
+    try {
+      await login(formData) 
+      await getCart();
+    } catch (err) {
+      console.log(err);
+    }
   };
+
   const handleDataChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -37,6 +45,14 @@ const Login = () => {
         onSubmit={handleLogin}
         className="flex flex-col gap-4 mx-auto my-20 w-1/4"
       >
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            googleLogin(credentialResponse.credential);
+          }}
+          onError={() => {
+            console.log("Login Failed");
+          }}
+        />
         <div className="flex gap-2 self-center items-center">
           <div className="h-px bg-gray-400 w-10"></div>
           <p>Hoặc</p>

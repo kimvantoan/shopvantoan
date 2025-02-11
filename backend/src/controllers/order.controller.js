@@ -9,10 +9,8 @@ export const createOrder = async (req, res) => {
   try {
     const order = new Order({ userId, products, ...req.body });
     await order.save();
-    res.status(201).json(order);
+    res.status(201).json({message:"Đặt hàng thành công"});
   } catch (error) {
-    console.log(error);
-
     res.status(400).json({ error: error.message });
   }
 };

@@ -8,8 +8,6 @@ const ListProduct = () => {
   useEffect(() => {
     getProducts();
   }, []);
-  console.log(products);
-
   return (
     <>
       {products && products.length > 0 ? (

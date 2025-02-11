@@ -22,7 +22,7 @@ export const addWish = async (req, res) => {
     await wish.save();
     res
       .status(200)
-      .json({ message: "The product has been added to your wish" });
+      .json({ message: "Đã thêm vào sản phẩm yêu thích" });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

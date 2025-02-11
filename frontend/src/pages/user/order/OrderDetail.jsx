@@ -28,10 +28,10 @@ const OrderDetail = ({ order }) => {
       </DialogHeader>
       <div className="bg-gray-50 w-fit">
         <p className="bg-red-100 p-2">Địa chỉ nhận hàng</p>
-        <div className="p-2">
-          <p className="font-bold">{order.shippingAddress.name}</p>
-          <p>{order.shippingAddress.phone}</p>
-          <p>{`${order.shippingAddress.detail}, ${order.shippingAddress.commune}, ${order.shippingAddress.district}, ${order.shippingAddress.city}`}</p>
+        <div className="p-2 text-sm space-y-2">
+          <p className="font-semibold">Tên: {order.shippingAddress.name}</p>
+          <p>Sđt: {order.shippingAddress.phone}</p>
+          <p>Địa chỉ: {`${order.shippingAddress.detail}, ${order.shippingAddress.commune}, ${order.shippingAddress.district}, ${order.shippingAddress.city}`}</p>
         </div>
       </div>
       <div className="bg-gray-50 flex my-3">

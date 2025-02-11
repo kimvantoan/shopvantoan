@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "../../assets/Logo.jpg";
-import { Link} from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { IoMdSearch } from "react-icons/io";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import {
@@ -54,23 +54,32 @@ const HeaderUser = () => {
     },
   ];
   return (
-    <header className="px-40 py-5 flex justify-between items-center border-b">
+    <header className="px-40 py-3 flex justify-between items-center border-b">
       <img src={logo} alt="" />
-      <ul className="flex items-center gap-10 text-lg">
+      <ul className="flex items-center gap-10 font-semibold">
         <li>
-          <Link to="/" className={""}>
+          <NavLink
+            to="/"
+            className={({ isActive }) => (isActive ? "text-yellow-600" : "")}
+          >
             TRANG CHỦ
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="/shop" className={""}>
+          <NavLink
+            to="/shop"
+            className={({ isActive }) => (isActive ? "text-yellow-600" : "")}
+          >
             SẢN PHẨM
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="/" className={""}>
+          <NavLink
+            to="/contact"
+            className={({ isActive }) => (isActive ? "text-yellow-600" : "")}
+          >
             LIÊN HỆ
-          </Link>
+          </NavLink>
         </li>
       </ul>
       <div className="flex gap-6 items-center">
@@ -105,7 +114,7 @@ const HeaderUser = () => {
           </DropdownMenuContent>
         </DropdownMenu>
         <Link to={"/cart"} className="indicator">
-          <span className="indicator-item badge bg-gray-200 font-bold text-gray-500">
+          <span className="indicator-item badge bg-red-500 font-bold text-white">
             {cart.length}
           </span>
           <AiOutlineShoppingCart

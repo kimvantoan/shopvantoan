@@ -95,24 +95,8 @@ const Detail = () => {
             </div>
           ))}
         </div>
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious href="#" />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext href="#" />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
         <form onSubmit={handleReview}>
-          <h3 className="font-semibold mb-4">Đánh giá của bạn</h3>
+          <h3 className="font-semibold mt-5">Đánh giá của bạn</h3>
           <div className="rating">
             {[...Array(5)].map((_, index) => (
               <input
