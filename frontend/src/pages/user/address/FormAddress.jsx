@@ -1,18 +1,30 @@
 import React, { useEffect, useState } from "react";
 import {
-  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useAddressStore } from "@/stores/addressStore";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { toast } from "sonner";
+import axios from "axios";
 const FormAddress = ({ address }) => {
+  const [cities, setCities] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [wards, setWards] = useState([]);
   const { createAddress, updateAddress, action, loading } = useAddressStore();
   const [data, setData] = useState({
     name: "",
@@ -22,6 +34,36 @@ const FormAddress = ({ address }) => {
     commune: "",
     detail: "",
   });
+  const city = async () => {
+    const city = await axios.get("https://provinces.open-api.vn/api/");
+    setCities(city.data);
+  };
+
+  const district = async (name) => {
+    const code = cities.find((item) => item.name === name);
+    const district =code && await axios.get(
+      `https://provinces.open-api.vn/api/p/${code.code}?depth=2`
+    );
+    setDistricts(district?.data.districts);
+  };
+
+  const ward = async (name) => {
+    const code = await cities?.find((item) => item.name === data?.city);
+    const res =
+      code &&
+      (await axios.get(
+        `https://provinces.open-api.vn/api/p/${code.code}?depth=3`
+      ));
+    const ward = res?.data.districts.find((item) => item.name === name);
+    setWards(ward?.wards);
+  };
+
+  useEffect(() => {
+    city();
+    district(data?.city);
+    ward(data?.district);
+  }, [data?.city]);
+
   useEffect(() => {
     if (action === "edit") {
       setData(address);
@@ -39,7 +81,7 @@ const FormAddress = ({ address }) => {
     }
   };
   return (
-    <DialogContent className="w-1/2">
+    <DialogContent className="w-1/2 top-[38%]">
       <DialogHeader>
         <DialogTitle>
           {action === "edit" ? "Sửa địa chỉ" : "Thêm địa chỉ"}
@@ -74,37 +116,76 @@ const FormAddress = ({ address }) => {
           <Label htmlFor="city" className="">
             Thành phố
           </Label>
-          <Input
-            id="city"
-            onChange={(e) => setData({ ...data, city: e.target.value })}
-            type="text"
-            required
-            value={data?.city}
-          />
+          <Select
+            defaultValue={address?.city}
+            onValueChange={(e) => {
+              setData({ ...data, city: e }), district(e);
+            }}
+          >
+            <SelectTrigger className="">
+              <SelectValue placeholder="Chọn thành phố" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Thành phố</SelectLabel>
+                {cities?.map((city) => (
+                  <SelectItem key={city.code} value={city.name}>
+                    {city.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
         <div className="grid gap-2">
           <Label htmlFor="district" className="">
             Quận, huyện
           </Label>
-          <Input
-            id="district"
-            onChange={(e) => setData({ ...data, district: e.target.value })}
-            type="text"
-            required
-            value={data?.district}
-          />
+          <Select
+            defaultValue={address?.district}
+            onValueChange={(e) => {
+              setData({ ...data, district: e }), ward(e);
+            }}
+          >
+            <SelectTrigger className="">
+              <SelectValue placeholder="Chọn quận, huyện" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Quận, huyện</SelectLabel>
+                {districts?.map((district) => (
+                  <SelectItem key={district.code} value={district.name}>
+                    {district.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
         <div className="grid col-span-2 gap-2">
           <Label htmlFor="commune" className="">
-            Xã
+            Xã, Phuờng
           </Label>
-          <Input
-            id="commune"
-            onChange={(e) => setData({ ...data, commune: e.target.value })}
-            type="text"
-            required
-            value={data?.commune}
-          />
+          <Select
+            defaultValue={address?.commune}
+            onValueChange={(e) => {
+              setData({ ...data, commune: e });
+            }}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Chọn xã, phường" />
+            </SelectTrigger>
+            <SelectContent className="max-h-[300px]">
+              <SelectGroup>
+                <SelectLabel>Xã, phường</SelectLabel>
+                {wards?.map((ward) => (
+                  <SelectItem key={ward.code} value={ward.name}>
+                    {ward.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
         <div className="grid col-span-2 gap-2">
           <Label htmlFor="detaildetail" className="">

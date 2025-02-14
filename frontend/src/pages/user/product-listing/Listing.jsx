@@ -1,5 +1,5 @@
 import Filter from "@/components/Filter";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import ListProduct from "./ListProduct";
 import {
   Pagination,
@@ -61,6 +61,7 @@ const Listing = () => {
     if (!params.has("sort")) {
       params.set("sort", "newest");
     }
+    !params.has("page") && params.set("page", 1);
     getProducts(params);
   }, [sort]);
   const handlePage = (value) => {
@@ -70,7 +71,6 @@ const Listing = () => {
   };
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
-    params.set("page", 1);
     setSearchParams(params);
   }, [totalPages]);
 

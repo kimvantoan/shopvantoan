@@ -10,7 +10,7 @@ const UserLayout = () => {
       <main>
         <Outlet />
       </main>
-      <Toaster position="top-right" richColors/>
+      <Toaster richColors/>
       <FooterUser />
     </div>
   );

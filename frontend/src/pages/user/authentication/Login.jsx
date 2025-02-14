@@ -43,9 +43,10 @@ const Login = () => {
       <PageTitle pagetitle="Đăng Nhập" crumb={breadcrumbData} />
       <form
         onSubmit={handleLogin}
-        className="flex flex-col gap-4 mx-auto my-20 w-1/4"
+        className="flex flex-col items-center gap-4 mx-auto my-20 w-1/4"
       >
         <GoogleLogin
+        className="justify-center"
           onSuccess={(credentialResponse) => {
             googleLogin(credentialResponse.credential);
           }}
@@ -78,7 +79,7 @@ const Login = () => {
             id="password"
           />
         </div>
-        <div className="text-right hover:underline">
+        <div className="text-sm hover:underline">
           <Link to={"/forgotpassword"}>Quên mật khẩu</Link>
         </div>
         {loading ? (

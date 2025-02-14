@@ -1,8 +1,7 @@
 import axios from "axios";
 const axiosInstance = axios.create({
-    baseURL: "https://shopvantoan-backend.onrender.com",
-    withCredentials: true
-})
+  baseURL: import.meta.env.VITE_SERVER_URL,
+  withCredentials: true,
+});
 
-export default axiosInstance
-// https://shopvantoan-backend.onrender.com
+export default axiosInstance;

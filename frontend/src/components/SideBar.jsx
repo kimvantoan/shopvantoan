@@ -1,9 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { Button } from "./ui/button";
-import { IoCameraReverseOutline } from "react-icons/io5";
-import { Label } from "./ui/label";
 import { FaHandSparkles } from "react-icons/fa";
 import { AiOutlineInbox } from "react-icons/ai";
 import { FaRegUser } from "react-icons/fa";
@@ -34,11 +32,10 @@ const SideBar = () => {
     },
   ];
   const { user, logout } = useAuthStore();
-
   return (
     <div className="flex flex-col border-2 w-[300px] h-fit">
       <div className="flex items-center gap-2 border-b-2 p-2">
-        <img src={user.avatar} className="size-20 rounded-full" alt="" />
+        <img src={user?.avatar} className="size-20 rounded-full" alt="" />
         <div className="text-start">
           <p className="flex gap-1 items-center">
             Xin chào <FaHandSparkles className="text-yellow-500" />

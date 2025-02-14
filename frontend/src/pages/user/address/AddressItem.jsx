@@ -7,7 +7,7 @@ import { FiEdit } from "react-icons/fi";
 import { useAddressStore } from "@/stores/addressStore";
 import { toast } from "sonner";
 const AddressItem = ({ address }) => {
-  const { deleteAddress, handleAction ,action} = useAddressStore();
+  const { deleteAddress, handleAction} = useAddressStore();
   const handleDelete = async () => {
     await deleteAddress(address._id);
     toast.success("Xóa địa chỉ thành công");
@@ -15,8 +15,8 @@ const AddressItem = ({ address }) => {
   return (
     <div className="flex flex-col gap-2 p-3 border-2 rounded-lg">
       <p className="font-bold">{address.name}</p>
-      <p>{address.phone}</p>
-      <p>{`${address.detail}, ${address.commune}, ${address.district}, ${address.city}`}</p>
+      <p className="text-sm">{address.phone}</p>
+      <p className="text-sm">{`${address.detail}, ${address.commune}, ${address.district}, ${address.city}`}</p>
       <div className="flex gap-2">
         <Dialog>
           <DialogTrigger asChild>

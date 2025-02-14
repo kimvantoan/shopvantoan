@@ -1,23 +1,22 @@
 import { create } from "zustand";
 import axiosInstance from "../lib/axios";
-import { createJSONStorage, persist } from "zustand/middleware";
 import { toast } from "sonner";
-
+import { createJSONStorage, persist } from "zustand/middleware";
 export const useAuthStore = create()(
-  // persist(
-    (set, get) => ({
+  persist(
+    (set) => ({
       user: null,
       loading: false,
       error: null,
+      success: null,
       signup: async (data) => {
         try {
           set({ loading: true });
           await axiosInstance.post("/api/auth/register", data);
           set({ loading: false });
-          location.href = "/login";
-          toast.success(res.data.message)
+          toast.success(res.data.message);
         } catch (error) {
-          toast.error(error.response.data.message)  
+          toast.error(error.response.data.message);
           set({ loading: false });
         }
       },
@@ -26,8 +25,8 @@ export const useAuthStore = create()(
           set({ loading: true });
           const res = await axiosInstance.post("/api/auth/login", data);
           set({ user: res.data.user, loading: false });
-        } catch (error) { 
-          toast.error(error.response.data.message)
+        } catch (error) {
+          toast.error(error.response.data.message);
           set({ loading: false });
         }
       },
@@ -43,14 +42,58 @@ export const useAuthStore = create()(
           set({ loading: false });
         }
       },
+      forgotPass: async (data) => {
+        try {
+          set({ loading: true });
+          const res = await axiosInstance.post(
+            "/api/auth/forgot-password",
+            data
+          );
+          set({ loading: false });
+          toast.success(res.data.message);
+        } catch (error) {
+          toast.error(error.response.data.message);
+          set({ loading: false });
+        }
+      },
       ResetPass: async (data) => {
         try {
           set({ loading: true });
-          const res =  await axiosInstance.post("/api/auth/resetPasspassword", data);
+          const res = await axiosInstance.post(
+            `/api/auth/reset-password/${data.token}`,
+            data
+          );
           set({ loading: false });
-          toast.success(res.data.message)
+          toast.success(res.data.message);
         } catch (error) {
-          toast.error(error.response.data.message)
+          toast.error(error.response.data.message);
+          set({ loading: false });
+        }
+      },
+      changePass: async (data) => {
+        try {
+          set({ loading: true });
+          const res = await axiosInstance.post(
+            "/api/auth/change-password",
+            data
+          );
+          set({ success: res.data.success });
+          toast.success(res.data.message);
+          set({ loading: false });
+        } catch (error) {
+          toast.error(error.response.data.message);
+          set({ loading: false });
+          console.log(error);
+        }
+      },
+      verify_OTP: async (data) => {
+        try {
+          set({ loading: true });
+          const res = await axiosInstance.post("/api/auth/verify-otp", data);
+          set({ loading: false });
+          toast.success(res.data.message);
+        } catch (error) {
+          toast.error(error.response.data.message);
           set({ loading: false });
         }
       },
@@ -61,6 +104,7 @@ export const useAuthStore = create()(
           sessionStorage.removeItem("cart-storage");
           sessionStorage.removeItem("address-store");
           sessionStorage.removeItem("wish-storage");
+          sessionStorage.removeItem("auth-storage");
           set({ user: null, loading: false });
           location.replace("/login");
         } catch (error) {
@@ -85,17 +129,16 @@ export const useAuthStore = create()(
           );
           set({ user: res.data.user });
           set({ loading: false });
-          toast.success(res.data.message)
+          toast.success(res.data.message);
         } catch (error) {
-          toast.error(error.response.data.message)
+          toast.error(error.response.data.message);
           set({ loading: false });
         }
       },
+    }),
+    {
+      name: "auth-storage",
+      storage: createJSONStorage(() => sessionStorage),
     }
-  // ),
-    // {
-    //   name: "auth",
-    //   // storage: createJSONStorage(() => sessionStorage),
-    // }
   )
 );

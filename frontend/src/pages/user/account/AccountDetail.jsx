@@ -5,14 +5,13 @@ import { LoadingButton } from "@/components/ui/loading-button";
 import { useAuthStore } from "@/stores/authStore";
 import React, { useState } from "react";
 import { IoCameraReverseOutline } from "react-icons/io5";
-import { toast } from "sonner";
 
 const AccountDetail = () => {
-  const { user, loading, updateUser } = useAuthStore();
+  const { user, loading, updateUser} = useAuthStore();
   const [data, setData] = useState({
-    _id: user._id,
-    fullname: user.fullname,
-    avatar: user.avatar,
+    _id: user?._id,
+    fullname: user?.fullname,
+    avatar: user?.avatar,
   });
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -30,9 +29,9 @@ const AccountDetail = () => {
         <div className="self-center relative w-fit">
           <img
             src={
-              typeof data.avatar === "string"
-                ? data.avatar
-                : URL.createObjectURL(data.avatar)
+              typeof data?.avatar === "string"
+                ? data?.avatar
+                : URL.createObjectURL(data?.avatar)
             }
             className="size-20 rounded-full"
             alt=""
@@ -65,7 +64,7 @@ const AccountDetail = () => {
           <Label htmlFor="email" className="">
             Email
           </Label>
-          <Input id="email" disabled value={user.email} type="email" />
+          <Input id="email" disabled value={user?.email} type="email" />
         </div>
         {loading ? (
           <LoadingButton

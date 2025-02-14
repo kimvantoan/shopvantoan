@@ -50,8 +50,7 @@ const getProducts = async (req, res) => {
     let query = {};
     if (q) {
       query.name = {
-        $regex: q,
-        $options: "i",
+        $regex: new RegExp(q, "i"),
       };
     }
     if (category) {
