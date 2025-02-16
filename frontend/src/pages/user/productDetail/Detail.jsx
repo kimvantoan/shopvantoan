@@ -16,11 +16,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { useProductStore } from "@/stores/productStore";
 import { Button } from "@/components/ui/button";
 import { useReviewStore } from "@/stores/reviewStore";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import formatDate from "@/utils/FormatDate";
 import { LoadingButton } from "@/components/ui/loading-button";
+import { toast } from "sonner";
+import { useAuthStore } from "@/stores/authStore";
 const Detail = () => {
   const { product } = useProductStore();
+  const { user } = useAuthStore();
   const { createReview, getReviewsbyProduct, reviews, loading } =
     useReviewStore();
   const { id } = useParams();
@@ -29,11 +32,21 @@ const Detail = () => {
     comment: "",
     productId: id,
   });
+  const navigate = useNavigate();
   const handleReview = (e) => {
     e.preventDefault();
-    createReview(review).then(() => {
-      getReviewsbyProduct(id);
-    });
+    if (!user) {
+      toast.info("Vui lòng đăng nhập", {
+        action: {
+          label: "Đăng nhập",
+          onClick: () => navigate("/login"),
+        },
+      });
+    } else {
+      createReview(review).then(() => {
+        getReviewsbyProduct(id);
+      });
+    }
   };
 
   useEffect(() => {

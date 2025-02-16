@@ -27,7 +27,7 @@ import { Link, useNavigate } from "react-router-dom";
           className="w-full"
         >
           <CarouselContent>
-            {categories.map((category) => (
+            {categories?.map((category) => (
               <CarouselItem onClick={() => navigate(`/shop?category=${category._id}`)}  key={category.id} className="md:basis-1/3 lg:basis-1/4">
                 <Card className="border-none">
                   <CardContent className="p-0">

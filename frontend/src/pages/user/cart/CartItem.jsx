@@ -6,11 +6,15 @@ import React from "react";
 import { FaRegTrashCan } from "react-icons/fa6";
 
 const CartItem = ({ cartItem }) => {
-  const { updateQuantity,deleteCart } = useCartStore();
+  const { updateQuantity, deleteCart } = useCartStore();
   return (
     <div className="grid grid-cols-8 items-center">
       <div className="size-20 bg-gray-100 rounded-lg overflow-hidden">
-        <img className="overflow-cover" alt="" src={cartItem?.productId.images[0].url} />
+        <img
+          className="overflow-cover"
+          alt=""
+          src={cartItem?.productId.images[0].url}
+        />
       </div>
       <div className="col-span-3">
         <p className="font-bold">{cartItem?.productId.name}</p>
@@ -19,18 +23,33 @@ const CartItem = ({ cartItem }) => {
         </p>
         <p>{formatPrice(cartItem?.productId.price)}</p>
       </div>
-      <Input
-        type="number"
-        onChange={(e) => {
-          updateQuantity({
-            id: cartItem._id,
-            quantity: e.target.value,
-          });
-        }}
-        min={1}
-        defaultValue={cartItem?.quantity}
-        className="place-self-center col-span-2 w-32"
-      />
+      <div className="flex items-center border w-fit place-self-center col-span-2 p-1 border-red-500">
+        <Button
+          onClick={(e) => {
+            e.preventDefault();
+            cartItem.quantity > 1 &&
+              updateQuantity({
+                id: cartItem._id,
+                quantity: cartItem.quantity - 1,
+              });
+          }}
+        >
+          -
+        </Button>
+        <p className="w-[50px] text-center">{cartItem?.quantity}</p>
+        <Button
+          onClick={(e) => {
+            e.preventDefault();
+            updateQuantity({
+              id: cartItem._id,
+              quantity: cartItem.quantity + 1,
+            });
+          }}
+        >
+          +
+        </Button>
+      </div>
+
       <p className="place-self-center">
         {formatPrice(cartItem?.quantity * cartItem?.productId.price)}
       </p>

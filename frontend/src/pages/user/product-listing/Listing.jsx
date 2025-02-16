@@ -59,11 +59,11 @@ const Listing = () => {
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
     if (!params.has("sort")) {
-      params.set("sort", "newest");
+      params.append("sort", "newest");
     }
     !params.has("page") && params.set("page", 1);
     getProducts(params);
-  }, [sort]);
+  }, []);
   const handlePage = (value) => {
     const params = new URLSearchParams(searchParams);
     params.set("page", value);
@@ -72,7 +72,7 @@ const Listing = () => {
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
     setSearchParams(params);
-  }, [totalPages]);
+  }, [searchParams]);
 
   return (
     <div className="flex justify-between mx-20 gap-10 mt-10">

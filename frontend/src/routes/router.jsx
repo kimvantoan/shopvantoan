@@ -16,6 +16,7 @@ import UserLayout from "@/layouts/userLayout/UserLayout";
 import { useAuthStore } from "@/stores/authStore";
 import Checkout from "@/pages/user/checkout/Checkout";
 import { Search } from "@/pages/user/search/Search";
+import Contact from "@/pages/user/contact/Contact";
 
 const AuthenticatedUser = ({ children }) => {
   const { user } = useAuthStore();
@@ -76,6 +77,10 @@ export const router = createBrowserRouter([
       {
         path: "/account",
         element: <Account />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
       },
       {
         path: "/shop",

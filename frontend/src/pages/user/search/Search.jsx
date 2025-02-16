@@ -75,7 +75,7 @@ export const Search = () => {
             ))}
         </div>
       )}
-      <Pagination className={!searchParams.get("q") ? "hidden" : ""}>
+      <Pagination className={!searchParams.get("q") ||totalPages<2 ? "hidden" : ""}>
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
