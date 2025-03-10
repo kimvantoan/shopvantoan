@@ -11,24 +11,19 @@ export const useCartStore = create(
       error: null,
       totalPrice: 0,
       getCart: async () => {
-        set({ loading: true });
         try {
           const res = await axiosInstance.get("/api/cart");
           set({ cart: res.data.cart.products });
           get().handleTotal();
-          set({ loading: false })
         } catch (error) {
           set({ error: error.message, loading: false });
         }
       },
 
       addToCart: async (data) => {
-        set({ loading: true });
         try {
           const res = await axiosInstance.post("/api/cart/add", data);
           get().getCart();
-          get().handleTotal();
-          set({ loading: false });
           toast.success(res.data.message)
         } catch (error) {
           set({ error: error.message, loading: false });
@@ -43,7 +38,6 @@ export const useCartStore = create(
         }));
       },
       updateQuantity: async (data) => {
-        set({ loading: true });
         try {
           await axiosInstance.put(`/api/cart/update/${data.id}`, data);
           set((state) => {
@@ -52,8 +46,8 @@ export const useCartStore = create(
             );
             return { cart: newCart };
           });
-          get().handleTotal();
-          set({ loading: false });
+          get().getCart();
+
         } catch (error) {
           console.log(error);
           set({ error: error.message, loading: false });
@@ -62,13 +56,12 @@ export const useCartStore = create(
 
       deleteCart: async (id) => {
         try {
-          set({ loading: true });
           await axiosInstance.delete(`/api/cart/${id}`);
           set((state) => ({
             cart: state.cart.filter((item) => item._id !== id),
           }));
-          get().handleTotal();
-          set({ loading: false });
+          get().getCart();
+
         } catch (error) {
           set({ error: error.message, loading: false });
         }

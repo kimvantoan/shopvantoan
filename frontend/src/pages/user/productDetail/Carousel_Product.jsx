@@ -36,7 +36,7 @@ import { useReviewStore } from "@/stores/reviewStore";
 const Carousel_Product = () => {
   const { product } = useProductStore();
   const { user } = useAuthStore();
-  const { addToCart, loading } = useCartStore();
+  const { addToCart } = useCartStore();
   const { addWish, wishes } = useWishStore();
   const { reviews } = useReviewStore();
   const { id } = useParams();
@@ -47,8 +47,9 @@ const Carousel_Product = () => {
     size: "",
   });
   const navigate = useNavigate();
-
+  const [loading,setLoading] = useState(false);
   const addToCartHandler = async (e) => {
+    setLoading(true);
     e.preventDefault();
     if (!user) {
       toast.info("Vui lòng đăng nhập", {
@@ -59,6 +60,7 @@ const Carousel_Product = () => {
       });
     } else {
       await addToCart(data);
+      setLoading(false);
     }
   };
   const addWishHandler = async (e) => {

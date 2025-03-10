@@ -1,25 +1,22 @@
 import { create } from "zustand";
 import axios from "../lib/axios";
-export const useReviewStore = create((set) => ({
+export const useReviewStore = create((set,get) => ({
   reviews: [],
   loading: false,
   error: null,
   getReviewsbyProduct: async (id) => {
-    set({ loading: true });
     try {
       const res = await axios.get(`/api/review/${id}`);
-      set({ reviews: res.data.reviews, loading: false });
+      set({ reviews: res.data.reviews });
     } catch (error) {
-      set({ error: error.message, loading: false });
+      set({ error: error.message});
     }
   },
   createReview: async (data) => {
-    set({ loading: true });
     try {
       await axios.post("/api/review", data);
-      set({ loading: false });
     } catch (error) {
-      set({ error: error.message, loading: false });
+      set({ error: error.message});
     }
   },
 }));

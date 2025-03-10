@@ -19,8 +19,8 @@ export const getAllOrders = async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
   try {
     const orders = await Order.find()
-      .populate("userId")
       .populate("products.productId")
+      .populate("userId")   
       .skip((page - 1) * limit)
       .limit(limit);
 
@@ -28,12 +28,7 @@ export const getAllOrders = async (req, res) => {
     const totalPages = Math.ceil(count / limit);
     res.status(200).json({
       orders,
-      pagination: {
-        page,
-        limit,
-        totalPages,
-        totalCount: count,
-      },
+      
     });
   } catch (error) {
     res.status(500).json({ error: error.message });

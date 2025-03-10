@@ -14,6 +14,15 @@ export const useOrderStore = create((set) => ({
       set({ error: error.message, loading: false });
     }
   },
+  getAllOrder: async () => {
+    set({ loading: true });
+    try {
+      const res = await axiosInstance.get("/api/order/all");
+      set({ orders: res.data.orders, loading: false });
+    } catch (error) {
+      set({ error: error.message, loading: false });
+    }
+  },
   createOrder: async (data) => {
     set({ loading: true });
     try {

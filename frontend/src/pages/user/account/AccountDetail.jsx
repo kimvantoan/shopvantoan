@@ -7,21 +7,24 @@ import React, { useState } from "react";
 import { IoCameraReverseOutline } from "react-icons/io5";
 
 const AccountDetail = () => {
-  const { user, loading, updateUser} = useAuthStore();
+  const { user, updateUser } = useAuthStore();
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     _id: user?._id,
     fullname: user?.fullname,
     avatar: user?.avatar,
   });
   const handleUpdate = async (e) => {
+    setLoading(true);
     e.preventDefault();
     const formData = new FormData();
     formData.append("avatar", data.avatar);
     formData.append("_id", data._id);
     formData.append("fullname", data.fullname);
     await updateUser(formData);
+    setLoading(false);
   };
-  
+
   return (
     <div>
       <h2 className="font-semibold text-xl">Thông tin tài khoản</h2>

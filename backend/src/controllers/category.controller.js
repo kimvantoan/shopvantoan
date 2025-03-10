@@ -43,7 +43,7 @@ const getCategoryById = async (req, res) => {
     if (!category) {
       return res.status(404).json({ error: "Không tìm thấy danh mục" });
     }
-    res.json(category);
+    res.json({category});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

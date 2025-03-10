@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import NewArrivals from "./NewArrivals";
 import { useCartStore } from "@/stores/cartStore";
 import Slide from "./Slide";
-import { CategoryCarousel } from "./Category";
+import { CategoryCarousel } from "./Categories";
 
 const Home = () => {
   const { getCart } = useCartStore();

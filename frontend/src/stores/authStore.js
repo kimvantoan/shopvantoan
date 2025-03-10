@@ -6,18 +6,15 @@ export const useAuthStore = create()(
   persist(
     (set) => ({
       user: null,
+      users: [],
       loading: false,
       error: null,
-      success: null,
       signup: async (data) => {
         try {
-          set({ loading: true });
-          await axiosInstance.post("/api/auth/register", data);
-          set({ loading: false });
+          const res = await axiosInstance.post("/api/auth/register", data);
           toast.success(res.data.message);
         } catch (error) {
           toast.error(error.response.data.message);
-          set({ loading: false });
         }
       },
       login: async (data) => {
@@ -99,14 +96,20 @@ export const useAuthStore = create()(
       },
       logout: async () => {
         try {
-          set({ loading: true });
           await axiosInstance.post("/api/auth/logout");
           sessionStorage.removeItem("cart-storage");
-          sessionStorage.removeItem("address-store");
-          sessionStorage.removeItem("wish-storage");
           sessionStorage.removeItem("auth-storage");
-          set({ user: null, loading: false });
+          set({ user: null });
           location.replace("/login");
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      getAllUser: async () => {
+        try {
+          set({ loading: true });
+          const res = await axiosInstance.get("/api/user");
+          set({ users: res.data.users, loading: false });
         } catch (error) {
           console.log(error);
         }
@@ -122,17 +125,14 @@ export const useAuthStore = create()(
       },
       updateUser: async (data) => {
         try {
-          set({ loading: true });
           const res = await axiosInstance.patch(
             `/api/user/${data.get("_id")}`,
             data
           );
           set({ user: res.data.user });
-          set({ loading: false });
           toast.success(res.data.message);
         } catch (error) {
           toast.error(error.response.data.message);
-          set({ loading: false });
         }
       },
     }),

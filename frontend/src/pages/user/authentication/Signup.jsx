@@ -12,11 +12,14 @@ const Signup = () => {
     email: "",
     password: "",
   });
-  const { signup, loading } = useAuthStore();
+  const { signup } = useAuthStore();
+  const [loading,setLoading] = useState(false)
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    setLoading(true);
     await signup(formData);
+    setLoading(false);
   };
   const handleDataChange = (e) => {
     const { name, value } = e.target;

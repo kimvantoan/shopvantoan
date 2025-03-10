@@ -1,9 +1,7 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import nodemailer from "nodemailer";
 import { OAuth2Client } from "google-auth-library";
-import CryptoJS from "crypto-js";
 import { sendForgotPasswordEmail, sendOTPEmail } from "../utils/mailer.js";
 import { generateOTP, verifyOTP } from "../utils/otp.js";
 export const register = async (req, res) => {

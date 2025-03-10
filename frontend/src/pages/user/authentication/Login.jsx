@@ -2,13 +2,12 @@ import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PageTitle from "@/components/PageTitle";
 import { useAuthStore } from "@/stores/authStore";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { useCartStore } from "@/stores/cartStore";
 import { GoogleLogin } from "@react-oauth/google";
-import { toast } from 'react-toastify';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -16,15 +15,23 @@ const Login = () => {
     password: "",
   });
   const { getCart } = useCartStore();
-  const { login, loading, googleLogin } = useAuthStore();
+  const { login, googleLogin } = useAuthStore();
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const handleLogin = async (e) => {
+    setLoading(true);
     e.preventDefault();
-    try {
-      await login(formData) 
-      await getCart();
-    } catch (err) {
-      console.log(err);
-    }
+    await login(formData);
+    await getCart();
+    setLoading(false);
+    navigate("/");
+  };
+  const handleLoginGG = async (credential) => {
+    setLoading(true);
+    await googleLogin(credential)
+    await getCart();
+    setLoading(false);
+    navigate("/");
   };
 
   const handleDataChange = (e) => {
@@ -46,9 +53,9 @@ const Login = () => {
         className="flex flex-col items-center gap-4 mx-auto my-20 w-1/4"
       >
         <GoogleLogin
-        className="justify-center"
+          className="justify-center"
           onSuccess={(credentialResponse) => {
-            googleLogin(credentialResponse.credential);
+            handleLoginGG(credentialResponse.credential);
           }}
           onError={() => {
             console.log("Login Failed");
