@@ -32,14 +32,6 @@ const Listing = () => {
       value: "oldToNew",
     },
     {
-      label: "Tên: A-Z",
-      value: "aToZ",
-    },
-    {
-      label: "Tên: Z-A",
-      value: "zToA",
-    },
-    {
       label: "Giá: Tăng dần",
       value: "lowToHigh",
     },

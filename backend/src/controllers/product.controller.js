@@ -1,6 +1,5 @@
 import Product from "../models/product.model.js";
 import cloudinary from "cloudinary";
-import removeAccents from "remove-accents";
 const createProduct = async (req, res) => {
   try {
     const images = req.files;
@@ -96,16 +95,6 @@ const getProducts = async (req, res) => {
       .sort(sortOptions)
       .skip((page - 1) * limit)
       .limit(limit);
-
-    if (sort === "aToZ" || sort === "zToA") {
-      products.sort((a, b) => {
-        const nameA = removeAccents(a.name || "").toLowerCase();
-        const nameB = removeAccents(b.name || "").toLowerCase();
-        return sort === "aToZ"
-          ? nameA.localeCompare(nameB)
-          : nameB.localeCompare(nameA);
-      });
-    }
 
     const count = await Product.countDocuments(query);
     const totalPages = Math.ceil(count / limit);

@@ -1,21 +1,25 @@
+import React from "react";
 import Home from "../pages/user/home/Home";
 import Login from "../pages/user/authentication/Login";
 import Signup from "../pages/user/authentication/Signup";
 import ForgotPassword from "@/pages/user/authentication/ForgotPassword";
 import ResetPassword from "@/pages/user/authentication/ResetPassword";
-import ProductDetail from "@/pages/user/productDetail/ProductDetail";
-import Cart from "@/pages/user/cart/Cart";
-import Wishlist from "@/pages/user/wishlist/Wishlist";
-import Address from "@/pages/user/address/Address";
-import Account from "@/pages/user/account/Account";
-import Listing from "@/pages/user/product-listing/Listing";
 import { createBrowserRouter } from "react-router-dom";
 import UserLayout from "@/layouts/userLayout/UserLayout";
-import Checkout from "@/pages/user/checkout/Checkout";
-import { Search } from "@/pages/user/search/Search";
-import Contact from "@/pages/user/contact/Contact";
-import Order from "@/pages/user/order/Order";
-
+const Cart = React.lazy(() => import("@/pages/user/cart/Cart"));
+const Wishlist = React.lazy(() => import("@/pages/user/wishlist/Wishlist"));
+const Order = React.lazy(() => import("@/pages/user/order/Order"));
+const Listing = React.lazy(() =>
+  import("@/pages/user/product-listing/Listing")
+);
+const ProductDetail = React.lazy(() =>
+  import("@/pages/user/productDetail/ProductDetail")
+);
+const Address = React.lazy(() => import("@/pages/user/address/Address"));
+const Account = React.lazy(() => import("@/pages/user/account/Account"));
+const Checkout = React.lazy(() => import("@/pages/user/checkout/Checkout"));
+const Search = React.lazy(() => import("@/pages/user/search/Search"));
+const Contact = React.lazy(() => import("@/pages/user/contact/Contact"));
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -43,43 +47,83 @@ export const router = createBrowserRouter([
       },
       {
         path: "/product/:id",
-        element: <ProductDetail />,
+        element: (
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <ProductDetail />
+          </React.Suspense>
+        ),
       },
       {
         path: "/cart",
-        element: <Cart />,
+        element: (
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <Cart />
+          </React.Suspense>
+        ),
       },
       {
         path: "/orders",
-        element: <Order />,
+        element: (
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <Order />
+          </React.Suspense>
+        ),
       },
       {
         path: "/wishlist",
-        element: <Wishlist />,
+        element: (
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <Wishlist />
+          </React.Suspense>
+        ),
       },
       {
         path: "/address",
-        element: <Address />,
+        element: (
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <Address />
+          </React.Suspense>
+        ),
       },
       {
         path: "/account",
-        element: <Account />,
+        element: (
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <Account />
+          </React.Suspense>
+        ),
       },
       {
         path: "/contact",
-        element: <Contact />,
+        element: (
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <Contact />
+          </React.Suspense>
+        ),
       },
       {
         path: "/shop",
-        element: <Listing />,
+        element: (
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <Listing />
+          </React.Suspense>
+        ),
       },
       {
         path: "/checkout",
-        element: <Checkout />,
+        element: (
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <Checkout />
+          </React.Suspense>
+        ),
       },
       {
         path: "/search",
-        element: <Search />,
+        element: (
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <Search />
+          </React.Suspense>
+        ),
       },
     ],
   },

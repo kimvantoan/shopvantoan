@@ -1,12 +1,11 @@
-import { useEffect, useRef, useState } from "react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
+import React from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
+import { Navigation, Pagination,Autoplay } from 'swiper/modules';
 
 const slides = [
   {
@@ -23,75 +22,30 @@ const slides = [
   },
 ];
 const Slide = () => {
-    const [api, setApi] = useState();
-    const intervalRef = useRef();
-  
-    useEffect(() => {
-      if (!api) {
-        return;
-      }
-  
-      const startAutoplay = () => {
-        intervalRef.current = window.setInterval(() => {
-          api.scrollNext();
-        }, 5000); 
-      };
-  
-      const stopAutoplay = () => {
-        if (intervalRef.current) {
-          window.clearInterval(intervalRef.current);
-        }
-      };
-  
-      startAutoplay();
-  
-      const element = api.element;
-      if (element) {
-        element.addEventListener("mouseenter", stopAutoplay);
-        element.addEventListener("mouseleave", startAutoplay);
-      }
-  
-      return () => {
-        stopAutoplay();
-        if (element) {
-          element.removeEventListener("mouseenter", stopAutoplay);
-          element.removeEventListener("mouseleave", startAutoplay);
-        }
-      };
-    }, [api]);
-  
     return (
-      <div className="w-full">
-        <Carousel
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-          setApi={setApi}
-          className="w-full"
-        >
-          <CarouselContent>
-            {slides.map((slide) => (
-              <CarouselItem key={slide.id}>
-                <Card className="border-none">
-                  <CardContent className="relative p-0 aspect-[2/1]">
-                    <img
-                      src={slide.image}
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg">
-                      <div className="absolute bottom-0 left-0 p-6 text-white">
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="left-4" />
-          <CarouselNext className="right-4" />
-        </Carousel>
-      </div>
+      <>
+      <Swiper
+         spaceBetween={30}
+         centeredSlides={true}
+         autoplay={{
+           delay: 3000,
+           disableOnInteraction: false,
+         }}
+         pagination={{
+           clickable: true,
+         }}
+         navigation={true}
+         modules={[Autoplay, Pagination, Navigation]}
+         className="mySwiper"
+      >
+        {slides.map((slide) => (
+          <SwiperSlide  key={slide.id}>
+            <img className= 'w-full h-[500px]' src={slide.image} alt="" />
+          </SwiperSlide>
+        ))}
+        
+      </Swiper>
+    </>
   )
 }
 
