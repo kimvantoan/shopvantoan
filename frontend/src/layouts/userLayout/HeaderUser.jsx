@@ -56,7 +56,7 @@ const HeaderUser = () => {
   return (
     <header className="px-40 py-3 flex justify-between items-center border-b">
       <img src={logo} alt="" />
-      <ul className="flex items-center gap-10 font-semibold">
+      <ul className="flex items-center gap-10 font-semibold text-sm">
         <li>
           <NavLink
             to="/"
@@ -84,11 +84,11 @@ const HeaderUser = () => {
       </ul>
       <div className="flex gap-6 items-center">
         <Link to={"/search"}>
-          <IoMdSearch size={28} className="text-gray-500" cursor={"pointer"} />
+          <IoMdSearch size={26}  cursor={"pointer"} />
         </Link>
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <FaRegUser size={23} className="text-gray-500" cursor={"pointer"} />
+            <FaRegUser size={21}  cursor={"pointer"} />
           </DropdownMenuTrigger>
           <DropdownMenuContent className="-translate-x-1/3">
             <DropdownMenuLabel>Tài khoản của tôi</DropdownMenuLabel>
@@ -118,8 +118,8 @@ const HeaderUser = () => {
             {cart.length}
           </span>
           <AiOutlineShoppingCart
-            className="text-gray-500"
-            size={26}
+            
+            size={24}
             cursor={"pointer"}
           />
         </Link>

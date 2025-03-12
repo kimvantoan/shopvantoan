@@ -93,7 +93,6 @@ const Filter = () => {
   return (
     <div>
       <Accordion
-        defaultValue={["item-1", "item-2", "item-3", "item-4"]}
         type="multiple"
         className="w-[250px]"
       >

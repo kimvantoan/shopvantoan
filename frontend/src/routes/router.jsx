@@ -6,6 +6,8 @@ import ForgotPassword from "@/pages/user/authentication/ForgotPassword";
 import ResetPassword from "@/pages/user/authentication/ResetPassword";
 import { createBrowserRouter } from "react-router-dom";
 import UserLayout from "@/layouts/userLayout/UserLayout";
+import { Search } from "@/pages/user/search/Search";
+import LoadingModal from "@/components/LoadingModal";
 const Cart = React.lazy(() => import("@/pages/user/cart/Cart"));
 const Wishlist = React.lazy(() => import("@/pages/user/wishlist/Wishlist"));
 const Order = React.lazy(() => import("@/pages/user/order/Order"));
@@ -18,7 +20,6 @@ const ProductDetail = React.lazy(() =>
 const Address = React.lazy(() => import("@/pages/user/address/Address"));
 const Account = React.lazy(() => import("@/pages/user/account/Account"));
 const Checkout = React.lazy(() => import("@/pages/user/checkout/Checkout"));
-const Search = React.lazy(() => import("@/pages/user/search/Search"));
 const Contact = React.lazy(() => import("@/pages/user/contact/Contact"));
 export const router = createBrowserRouter([
   {
@@ -48,7 +49,7 @@ export const router = createBrowserRouter([
       {
         path: "/product/:id",
         element: (
-          <React.Suspense fallback={<div>Loading...</div>}>
+          <React.Suspense fallback={<LoadingModal/>}>
             <ProductDetail />
           </React.Suspense>
         ),
@@ -56,7 +57,7 @@ export const router = createBrowserRouter([
       {
         path: "/cart",
         element: (
-          <React.Suspense fallback={<div>Loading...</div>}>
+          <React.Suspense fallback={<LoadingModal/>}>
             <Cart />
           </React.Suspense>
         ),
@@ -64,7 +65,7 @@ export const router = createBrowserRouter([
       {
         path: "/orders",
         element: (
-          <React.Suspense fallback={<div>Loading...</div>}>
+          <React.Suspense fallback={<LoadingModal/>}>
             <Order />
           </React.Suspense>
         ),
@@ -72,7 +73,7 @@ export const router = createBrowserRouter([
       {
         path: "/wishlist",
         element: (
-          <React.Suspense fallback={<div>Loading...</div>}>
+          <React.Suspense fallback={<LoadingModal/>}>
             <Wishlist />
           </React.Suspense>
         ),
@@ -80,7 +81,7 @@ export const router = createBrowserRouter([
       {
         path: "/address",
         element: (
-          <React.Suspense fallback={<div>Loading...</div>}>
+          <React.Suspense fallback={<LoadingModal/>}>
             <Address />
           </React.Suspense>
         ),
@@ -88,7 +89,7 @@ export const router = createBrowserRouter([
       {
         path: "/account",
         element: (
-          <React.Suspense fallback={<div>Loading...</div>}>
+          <React.Suspense fallback={<LoadingModal/>}>
             <Account />
           </React.Suspense>
         ),
@@ -96,7 +97,7 @@ export const router = createBrowserRouter([
       {
         path: "/contact",
         element: (
-          <React.Suspense fallback={<div>Loading...</div>}>
+          <React.Suspense fallback={<LoadingModal/>}>
             <Contact />
           </React.Suspense>
         ),
@@ -104,7 +105,7 @@ export const router = createBrowserRouter([
       {
         path: "/shop",
         element: (
-          <React.Suspense fallback={<div>Loading...</div>}>
+          <React.Suspense fallback={<LoadingModal/>}>
             <Listing />
           </React.Suspense>
         ),
@@ -112,7 +113,7 @@ export const router = createBrowserRouter([
       {
         path: "/checkout",
         element: (
-          <React.Suspense fallback={<div>Loading...</div>}>
+          <React.Suspense fallback={<LoadingModal/>}>
             <Checkout />
           </React.Suspense>
         ),
@@ -120,7 +121,7 @@ export const router = createBrowserRouter([
       {
         path: "/search",
         element: (
-          <React.Suspense fallback={<div>Loading...</div>}>
+          <React.Suspense fallback={<LoadingModal/>}>
             <Search />
           </React.Suspense>
         ),

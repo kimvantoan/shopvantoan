@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 const CardProduct = ({ product }) => {
   return (
     <Link
-    to={`/product/${product?._id}`}
-      className=" group overflow-hidden relative hover:shadow-gray-500/40 hover:shadow duration-300 cursor-pointer p-2"
+      to={`/product/${product?._id}`}
+      className="group overflow-hidden relative bg-gray-100 hover:shadow-gray-500/40 hover:shadow duration-300 cursor-pointer"
     >
-      <div className=" z-10 px-1 text-sm bg-white text-red-500 absolute top-3 left-3">
+      <div className="z-10 px-1 rounded-full text-sm text-white bg-red-500 absolute top-3 right-3">
         {-percentDis(product?.oldPrice, product?.price)}%
       </div>
       <div className="flex group bg-gray-100  h-[260px] mb-3 overflow-hidden">
@@ -23,7 +23,9 @@ const CardProduct = ({ product }) => {
       </div>
       <div className="text-center text-sm">
         <h3 className="group-hover:text-yellow-500">{product?.name}</h3>
-        <span className="text-red-500  mr-2">{formatPrice(product?.price)}</span>
+        <span className="text-red-500  mr-2">
+          {formatPrice(product?.price)}
+        </span>
         <s className="text-gray-500 text-xs">
           {formatPrice(product?.oldPrice)}
         </s>
