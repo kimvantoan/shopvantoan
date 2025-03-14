@@ -1,13 +1,10 @@
 import CardProduct from "@/components/CardProduct";
 import CardSkeleton from "@/components/CardSkeleton";
 import { useProductStore } from "@/stores/productStore";
-import React, { useEffect } from "react";
+import React from "react";
 
 const ListProduct = () => {
-  const { loading, getProducts, products } = useProductStore();
-  useEffect(() => {
-    getProducts();
-  }, []);
+  const { loading, products } = useProductStore();
   return (
     <>
       {products && products.length > 0 ? (

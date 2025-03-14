@@ -21,29 +21,18 @@ const createProduct = async (req, res) => {
 };
 
 const getProducts = async (req, res) => {
-  const {
-    page = 1,
-    limit = 12,
-    q,
-    category,
-    price,
-    size,
-    star,
-    sort,
-  } = req.query;
+  const { page = 1, limit = 12, q, category, price, sort } = req.query;
 
   try {
     let sortOptions = {};
-    if (sort) {
-      if (sort === "newest") {
-        sortOptions.createdAt = -1;
-      } else if (sort === "oldToNew") {
-        sortOptions.createdAt = 1;
-      } else if (sort === "lowToHigh") {
-        sortOptions.price = 1;
-      } else if (sort === "highToLow") {
-        sortOptions.price = -1;
-      }
+    if (sort === "newest") {
+      sortOptions.createdAt = -1;
+    } else if (sort === "oldToNew") {
+      sortOptions.createdAt = 1;
+    } else if (sort === "lowToHigh") {
+      sortOptions.price = 1;
+    } else if (sort === "highToLow") {
+      sortOptions.price = -1;
     }
 
     let query = {};
@@ -55,47 +44,20 @@ const getProducts = async (req, res) => {
     if (category) {
       query.category = { $in: category };
     }
-    if (size) {
-      query.sizes = { $in: size };
-    }
-    if (star) {
-      const starCoditons = star.map((item) => {
-        const minStar = parseInt(item);
-        return {
-          avgRate: {
-            $gte: minStar,
-            $lt: minStar + 1,
-          },
-        };
-      });
-      query = {
-        ...query,
-        $or: starCoditons,
-      };
-    }
-
+    
     if (price) {
-      const priceConditions = typeof price ==="string" ? [price] :price.map((range) => {
-        const [minPrice, maxPrice] = range.split("-").map((p) => parseFloat(p));
-        return {
-          price: {
-            $gte: minPrice,
-            $lte: maxPrice,
-          },
-        };
-      });
-      query = {
-        ...query,
-        $or: priceConditions,
+      const [minPrice, maxPrice] = price.split("-").map((p) => parseFloat(p));
+      query.price = {
+        $gte: minPrice,
+        $lte: maxPrice,
       };
     }
-
+    
     const products = await Product.find(query)
       .populate("category")
       .sort(sortOptions)
       .skip((page - 1) * limit)
       .limit(limit);
-
     const count = await Product.countDocuments(query);
     const totalPages = Math.ceil(count / limit);
     res.status(200).json({

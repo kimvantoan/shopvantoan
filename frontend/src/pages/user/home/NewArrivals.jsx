@@ -2,11 +2,16 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import CardProduct from "@/components/CardProduct";
 import { useProductStore } from "@/stores/productStore";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/scrollbar';
+import 'swiper/css/pagination';
+import {Scrollbar} from 'swiper/modules';
 const NewArrivals = () => {
-  const { getProducts,products } = useProductStore();
+  const { getProducts, products } = useProductStore();
   useEffect(() => {
-    getProducts({ sort: "newest", limit: 12 });
-  }, []); 
+    getProducts({ sort: "newest", limit: 10 });
+  }, []);
   return (
     <div>
       <h2 className="font-semibold text-3xl text-center">Sản phẩm mới</h2>
@@ -15,12 +20,37 @@ const NewArrivals = () => {
           Xem thêm
         </Link>
       </p>
-      <div className="grid grid-cols-4 gap-6">
+      <Swiper
+        slidesPerView={1}
+        spaceBetween={10}
+        scrollbar={true}
+        breakpoints={{
+          "@0.00": {
+            slidesPerView: 1,
+            spaceBetween: 10,
+          },
+          "@0.75": {
+            slidesPerView: 2,
+            spaceBetween: 20,
+          },
+          "@1.00": {
+            slidesPerView: 3,
+            spaceBetween: 40,
+          },
+          "@1.50": {
+            slidesPerView: 4,
+            spaceBetween: 50,
+          },
+        }}
+        modules={[Scrollbar]}
+        className="mySwiper "
+      >
         {products?.map((product) => (
-          <CardProduct key={product._id} product={product} />
+          <SwiperSlide>
+            <CardProduct key={product._id} product={product} />
+          </SwiperSlide>
         ))}
-        
-      </div>
+      </Swiper>
     </div>
   );
 };

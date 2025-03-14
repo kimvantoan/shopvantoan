@@ -9,7 +9,7 @@ const WishItem = ({ wish }) => {
 
   return (
     <div className="grid grid-cols-6 items-center">
-      <div className="size-20 bg-gray-100 rounded-lg overflow-hidden">
+      <div className="size-20 bg-gray-100 place-self-center rounded-lg overflow-hidden">
         <img src={wish.images[0].url} className="overflow-cover" alt="" />
       </div>
       <div className="col-span-2 space-y-3">

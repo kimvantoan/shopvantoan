@@ -19,11 +19,10 @@ const Order = () => {
       <LayoutProfile>
         {orders.length > 0 ? (
           <>
-            <div className="grid font-bold border-b bg-gray-100 py-3 grid-cols-6 text-center">
+            <div className="grid border-b text-gray-600  py-3 grid-cols-5 ">
               <p className="col-span-2">Mã đơn hàng</p>
               <p>Ngày đặt</p>
               <p>Thành tiền</p>
-              <p>Phương thức thanh toán</p>
               <p>Vận chuyển</p>
             </div>
             {orders.map((order) => (

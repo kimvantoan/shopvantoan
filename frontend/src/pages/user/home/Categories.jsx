@@ -42,9 +42,9 @@ import { FreeMode, Pagination } from 'swiper/modules';
                   <img
                     src={category.image.url}
                     alt={category.name}
-                    className="w-full aspect-[4/5] object-cover rounded-lg"
+                    className="w-full aspect-[4/5] object-cover"
                   />
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors rounded-lg flex items-center justify-center">
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors flex items-center justify-center">
                     <h3 className="text-white text-2xl font-bold">{category.name}</h3>
                   </div>
                 </div>

@@ -1,150 +1,40 @@
 import Filter from "@/components/Filter";
-import React, { useEffect } from "react";
+import React from "react";
 import ListProduct from "./ListProduct";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useProductStore } from "@/stores/productStore";
-import { useSearchParams } from "react-router-dom";
-const Listing = () => {
-  const { getProducts, totalPages, currentPage } = useProductStore();
-  const sortOption = [
-    {
-      label: "Mới nhất",
-      value: "newest",
-    },
-    {
-      label: "Cũ nhất",
-      value: "oldToNew",
-    },
-    {
-      label: "Giá: Tăng dần",
-      value: "lowToHigh",
-    },
-    {
-      label: "Giá: Giảm dần",
-      value: "highToLow",
-    },
-  ];
-  const [searchParams, setSearchParams] = useSearchParams();
-  
-  const handleSort = (value) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("sort", value);
-    setSearchParams(params);
-  };
-  const sort = searchParams.get("sort") || "newest";
-  useEffect(() => {
-    const params = new URLSearchParams(searchParams);
-    if (!params.has("sort")) {
-      params.append("sort", "newest");
-    }
-    !params.has("page") && params.set("page", 1);
-    getProducts(params);
-  }, []);
-  const handlePage = (value) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("page", value);
-    setSearchParams(params);
-  };
-  useEffect(() => {
-    const params = new URLSearchParams(searchParams);
-    setSearchParams(params);
-  }, [searchParams]);
 
+import { useProductStore } from "@/stores/productStore";
+import PageHeader from "./PageHeader";
+import { Pagination } from "@mui/material";
+import { useNavigate, useLocation } from "react-router-dom";
+
+const Listing = () => {
+  const { totalPages } = useProductStore();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const query = new URLSearchParams(location.search);
+  const page = parseInt(query.get("page")) || 1;
+
+  const handlePageChange = (event, value) => {
+    query.set('page', value);
+    navigate({
+      search: query.toString() 
+    });
+  };
   return (
-    <div className="flex justify-between mx-20 gap-10 mt-10">
+    <div className="mx-20 space-y-5">
+      <PageHeader />
       <Filter />
-      <div className="space-y-2 w-full">
-        <div className="flex gap-2 items-center justify-end">
-          <h2>Sắp xếp theo</h2>
-          <Select onValueChange={(e) => handleSort(e)} defaultValue={sort}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {sortOption.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
-        <ListProduct />
-        <Pagination className={parseInt(totalPages) <= 1 ? "hidden" : ""}>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                className={parseInt(currentPage) === 1 ? "hidden" : ""}
-                onClick={() => currentPage > 1 && handlePage(currentPage - 1)}
-              />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink
-                isActive={parseInt(currentPage) === 1}
-                onClick={() => handlePage(1)}
-              >
-                1
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink
-                className={`${
-                  parseInt(currentPage) === parseInt(totalPages) ||
-                  parseInt(currentPage) === 1
-                    ? "hidden"
-                    : ""
-                }`}
-                onClick={() => handlePage(currentPage)}
-                isActive
-              >
-                {currentPage}
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem
-              className={parseInt(totalPages) < 3 ? "hidden" : ""}
-            >
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink
-                isActive={parseInt(currentPage) === totalPages}
-                onClick={() => handlePage(totalPages)}
-              >
-                {totalPages}
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext
-                className={
-                  parseInt(currentPage) === parseInt(totalPages) ? "hidden" : ""
-                }
-                onClick={() =>
-                  currentPage < totalPages &&
-                  handlePage(parseInt(currentPage) + 1)
-                }
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      </div>
+      <ListProduct />
+      <Pagination
+      classes={{ul: "flex justify-center"}}
+        count={totalPages}
+        page={page} 
+        onChange={handlePageChange} 
+        variant="outlined"
+        color="primary"
+      />
     </div>
   );
 };

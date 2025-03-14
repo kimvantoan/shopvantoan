@@ -1,9 +1,10 @@
-import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/stores/cartStore";
 import formatPrice from "@/utils/FormatPrice";
+import { Button } from "@mui/material";
 import React from "react";
 import { FaRegTrashCan } from "react-icons/fa6";
-
+import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from '@mui/icons-material/Add';
 const CartItem = ({ cartItem }) => {
   const { updateQuantity, deleteCart } = useCartStore();
   return (
@@ -16,13 +17,13 @@ const CartItem = ({ cartItem }) => {
         />
       </div>
       <div className="col-span-3">
-        <p className="font-bold">{cartItem?.productId.name}</p>
-        <p>
+        <p className="font-medium">{cartItem?.productId.name}</p>
+        <p className="text-sm text-gray-500">
           {cartItem?.color}/{cartItem?.size}
         </p>
-        <p>{formatPrice(cartItem?.productId.price)}</p>
+        <p className="text-sm text-gray-500">{formatPrice(cartItem?.productId.price)}</p>
       </div>
-      <div className="flex items-center border w-fit place-self-center col-span-2 p-1 border-red-500">
+      <div className="flex items-center border rounded-sm w-fit place-self-center col-span-2">
         <Button
           onClick={(e) => {
             e.preventDefault();
@@ -32,10 +33,11 @@ const CartItem = ({ cartItem }) => {
                 quantity: cartItem.quantity - 1,
               });
           }}
+          color="black"
         >
-          -
+         <RemoveIcon/>
         </Button>
-        <p className="w-[50px] text-center">{cartItem?.quantity}</p>
+        <p className=" text-center">{cartItem?.quantity}</p>
         <Button
           onClick={(e) => {
             e.preventDefault();
@@ -44,8 +46,9 @@ const CartItem = ({ cartItem }) => {
               quantity: cartItem.quantity + 1,
             });
           }}
+           color="black"
         >
-          +
+          <AddIcon/>
         </Button>
       </div>
 

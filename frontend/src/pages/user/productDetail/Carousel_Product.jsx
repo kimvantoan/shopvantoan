@@ -58,6 +58,7 @@ const Carousel_Product = () => {
           onClick: () => navigate("/login"),
         },
       });
+      setLoading(false);
     } else {
       await addToCart(data);
       setLoading(false);

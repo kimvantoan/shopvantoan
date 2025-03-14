@@ -1,8 +1,9 @@
 import React from "react";
 import logo from "../../assets/Logo.jpg";
 import { Link, NavLink } from "react-router-dom";
-import { IoMdSearch } from "react-icons/io";
-import { AiOutlineShoppingCart } from "react-icons/ai";
+import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,6 +19,7 @@ import { IoIosLogOut } from "react-icons/io";
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { useAuthStore } from "@/stores/authStore";
 import { useCartStore } from "@/stores/cartStore";
+import { Badge } from "@mui/material";
 const HeaderUser = () => {
   const { user, logout } = useAuthStore();
   const { cart } = useCartStore();
@@ -54,13 +56,13 @@ const HeaderUser = () => {
     },
   ];
   return (
-    <header className="px-40 py-3 flex justify-between items-center border-b">
+    <header className="px-40 py-2 flex justify-between items-center fixed top-0 right-0 left-0 z-20 bg-white border-b shadow">
       <img src={logo} alt="" />
-      <ul className="flex items-center gap-10 font-semibold text-sm">
+      <ul className="flex items-center gap-10 font-medium text-sm">
         <li>
           <NavLink
             to="/"
-            className={({ isActive }) => (isActive ? "text-yellow-600" : "")}
+            className={({ isActive }) => (isActive ? "" : "text-gray-500")}
           >
             TRANG CHỦ
           </NavLink>
@@ -68,7 +70,7 @@ const HeaderUser = () => {
         <li>
           <NavLink
             to="/shop"
-            className={({ isActive }) => (isActive ? "text-yellow-600" : "")}
+            className={({ isActive }) => (isActive ? "" : "text-gray-500")}
           >
             SẢN PHẨM
           </NavLink>
@@ -76,19 +78,19 @@ const HeaderUser = () => {
         <li>
           <NavLink
             to="/contact"
-            className={({ isActive }) => (isActive ? "text-yellow-600" : "")}
+            className={({ isActive }) => (isActive ? "" : "text-gray-500")}
           >
             LIÊN HỆ
           </NavLink>
         </li>
       </ul>
-      <div className="flex gap-6 items-center">
+      <div className="flex gap-3 items-center">
         <Link to={"/search"}>
-          <IoMdSearch size={26}  cursor={"pointer"} />
+          <SearchOutlinedIcon cursor={"pointer"} />
         </Link>
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <FaRegUser size={21}  cursor={"pointer"} />
+            <AccountCircleOutlinedIcon cursor={"pointer"} />
           </DropdownMenuTrigger>
           <DropdownMenuContent className="-translate-x-1/3">
             <DropdownMenuLabel>Tài khoản của tôi</DropdownMenuLabel>
@@ -113,15 +115,10 @@ const HeaderUser = () => {
             )}
           </DropdownMenuContent>
         </DropdownMenu>
-        <Link to={"/cart"} className="indicator">
-          <span className="indicator-item badge bg-red-500 font-bold text-white">
-            {cart.length}
-          </span>
-          <AiOutlineShoppingCart
-            
-            size={24}
-            cursor={"pointer"}
-          />
+        <Link to={"/cart"} >
+          <Badge badgeContent={cart.length} color="success">
+            <ShoppingBagOutlinedIcon cursor={"pointer"} />
+          </Badge>
         </Link>
       </div>
     </header>
