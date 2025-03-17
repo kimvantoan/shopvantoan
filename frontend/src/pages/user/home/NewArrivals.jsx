@@ -2,11 +2,12 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import CardProduct from "@/components/CardProduct";
 import { useProductStore } from "@/stores/productStore";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/scrollbar';
-import 'swiper/css/pagination';
-import {Scrollbar} from 'swiper/modules';
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/scrollbar";
+import "swiper/css/pagination";
+import { Scrollbar } from "swiper/modules";
+import { KeyboardArrowRight } from "@mui/icons-material";
 const NewArrivals = () => {
   const { getProducts, products } = useProductStore();
   useEffect(() => {
@@ -14,15 +15,15 @@ const NewArrivals = () => {
   }, []);
   return (
     <div>
-      <h2 className="font-semibold text-3xl text-center">Sản phẩm mới</h2>
-      <p className="text-end text-lg">
-        <Link to={"/shop"} className="link">
-          Xem thêm
-        </Link>
-      </p>
+      <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold">New Arrivals</h2>
+          <Link to="/shop" className="text-sm font-medium flex items-center">
+            Xem thêm<KeyboardArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
       <Swiper
         slidesPerView={1}
-        spaceBetween={10}
+        spaceBetween={5}
         scrollbar={true}
         breakpoints={{
           "@0.00": {
@@ -39,7 +40,7 @@ const NewArrivals = () => {
           },
           "@1.50": {
             slidesPerView: 4,
-            spaceBetween: 50,
+            spaceBetween: 40,
           },
         }}
         modules={[Scrollbar]}

@@ -17,10 +17,11 @@ const Listing = () => {
   const page = parseInt(query.get("page")) || 1;
 
   const handlePageChange = (event, value) => {
-    query.set('page', value);
+    query.set("page", value);
     navigate({
-      search: query.toString() 
+      search: query.toString(),
     });
+    window.scrollTo(10, 440);
   };
   return (
     <div className="mx-20 space-y-5">
@@ -28,10 +29,10 @@ const Listing = () => {
       <Filter />
       <ListProduct />
       <Pagination
-      classes={{ul: "flex justify-center"}}
+        classes={{ ul: "flex justify-center" }}
         count={totalPages}
-        page={page} 
-        onChange={handlePageChange} 
+        page={page}
+        onChange={handlePageChange}
         variant="outlined"
         color="primary"
       />

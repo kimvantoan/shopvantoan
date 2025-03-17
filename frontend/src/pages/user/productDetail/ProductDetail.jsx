@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
-
 import Detail from "./Detail";
-import Similar from "./Similar";
 import Carousel_Product from "./Carousel_Product";
 import ProductSkeleton from "./ProductSkeleton";
 import { useProductStore } from "@/stores/productStore";
@@ -16,7 +14,6 @@ const ProductDetail = () => {
     <div className="px-32 flex flex-col gap-16">
       {loading ? <ProductSkeleton /> : <Carousel_Product />}
       <Detail />
-      <Similar />
     </div>
   );
 };

@@ -7,7 +7,7 @@ const UserLayout = () => {
   return (
     <div className="flex flex-col min-h-screen justify-between">
       <HeadersUser />
-      <main className="mt-16">
+      <main >
         <Outlet />
       </main>
       <Toaster richColors/>

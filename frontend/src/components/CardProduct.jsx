@@ -1,59 +1,74 @@
 import React from "react";
 import formatPrice from "@/utils/FormatPrice";
-import { percentDis } from "@/utils/Percentdis";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Star, StarHalf } from "@mui/icons-material";
+import { useWishStore } from "@/stores/wishStore";
+import { useAuthStore } from "@/stores/authStore";
 const CardProduct = ({ product }) => {
+  const navigate = useNavigate();
+  const { addWish, wishes } = useWishStore();
+  const { user } = useAuthStore();
+
+  const addWishHandler = async (id) => {
+    if (!user) {
+      toast.info("Vui lòng đăng nhập", {
+        action: {
+          label: "Đăng nhập",
+          onClick: () => navigate("/login"),
+        },
+      });
+    } else {
+      await addWish({ productId: id });
+    }
+  };
+  const isWish = wishes.some((item) => item.productId === product._id);
   return (
-    // <Link
-    //   to={`/product/${product?._id}`}
-    //   className="group overflow-hidden relative bg-gray-100 hover:shadow-gray-500/40 hover:shadow duration-300 cursor-pointer"
-    // >
-    //   <div className="z-10 px-1 rounded-full text-sm text-white bg-red-500 absolute top-3 right-3">
-    //     {-percentDis(product?.oldPrice, product?.price)}%
-    //   </div>
-    //   <div className="flex group bg-gray-100  h-[260px] mb-3 overflow-hidden">
-    //     <img
-    //       src={product?.images[0].url}
-    //       className="h-full group-hover:-translate-x-[100%] object-cover mx-auto duration-500"
-    //     />
-    //     <img
-    //       src={product?.images[1] && product?.images[1].url}
-    //       className="h-full group-hover:-translate-x-[100%] object-cover m-auto duration-500"
-    //     />
-    //   </div>
-    //   <div className="text-center text-sm">
-    //     <h3 className="group-hover:text-yellow-500">{product?.name}</h3>
-    //     <span className="text-red-500  mr-2">
-    //       {formatPrice(product?.price)}
-    //     </span>
-    //     <s className="text-gray-500 text-xs">
-    //       {formatPrice(product?.oldPrice)}
-    //     </s>
-    //   </div>
-    // </Link>
-    <Link to={`/product/${product?._id}`} className="max-w-sm bg-background">
-      <div className="relative">
-        <img
-          src={product?.images[1] && product?.images[1].url}
-          alt="Loveseat Sofa"
-          className="w-full h-72 object-cover"
-        />
-        <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-          {-percentDis(product?.oldPrice, product?.price)}%
-        </span>
-      </div>
-      <div className="space-y-2 mt-2">
-        <h2 className="">{product?.name}</h2>
-        <div className="flex gap-2 items-end">
-          <p className=" font-bold text-primary">
-            {formatPrice(product?.price)}
-          </p>
-          <p className="text-sm text-zinc-500 line-through">
-            {formatPrice(product?.oldPrice)}
-          </p>
+    <div onClick={() => navigate(`/product/${product._id}`)} className="group">
+      <div className="relative bg-gray-100 rounded-lg overflow-hidden mb-3">
+        <div className="aspect-square h-72 relative">
+          <img
+            src={product?.images[0].url || "/placeholder.svg"}
+            fill
+            className="object-contain p-4 size-full transition-transform duration-300 group-hover:scale-105"
+          />
+        </div>
+        <div className="absolute top-2 right-2">
+          <button
+            onClick={() => addWishHandler(product._id)}
+            className={`${
+              isWish ? "bg-red-500" : "bg-white"
+            } p-1.5 rounded-full shadow-sm`}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-4 h-4"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+              />
+            </svg>
+          </button>
         </div>
       </div>
-    </Link>
+      <h3 className="font-medium">{product?.name}</h3>
+      <div className="flex items-center justify-between">
+        <p className="font-bold text-primary">{formatPrice(product?.price)}</p>
+        <div className="flex items-center">
+          {Array.from({ length: Math.floor(product?.avgRate) }).map((_, i) => (
+            <Star key={i} className="w-4 h-4 text-yellow-400" />
+          ))}
+          {product?.avgRate % 1 !== 0 && (
+            <StarHalf className="w-4 h-4 text-yellow-400" />
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 

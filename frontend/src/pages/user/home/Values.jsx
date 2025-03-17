@@ -1,45 +1,41 @@
 import React from "react";
-import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
-import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
-import HttpsOutlinedIcon from '@mui/icons-material/HttpsOutlined';
-import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
+
+import { LocalShipping, SupportAgent, CreditCard } from "@mui/icons-material";
 const Values = () => {
-  const values = [
-    {
-      icon: LocalShippingOutlinedIcon,
-      title: "Vận chuyển miễn phí",
-      description: "Đơn hàng trên $200",
-    },
-    {
-      icon: AccountBalanceWalletOutlinedIcon,
-      title: "Hoàn tiền",
-      description: "Đảm bảo 30 ngày",
-    },
-    {
-      icon: HttpsOutlinedIcon,
-      title: "Thẻ quà tặng",
-      description: "Gửi thẻ quà tặng",
-    },
-    {
-      icon: LocalPhoneOutlinedIcon,
-      title: "Thanh toán an toàn",
-      description: "Thanh toán 100% an toàn",
-    },
-  ];
-  
   return (
-    <div className="flex flex-wrap justify-between">
-        {values.map((value, index) => (
-          <div
-            key={index}
-            className="p-2 gap-3 size-52 flex flex-col justify-center bg-gray-50"
-          >
-            <value.icon fontSize="large" />
-            <h3 className="font-medium text-lg mt-2">{value.title}</h3>
-            <p className="text-gray-500 text-sm">{value.description}</p>
+    <section className="bg-gray-50 py-10">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="flex items-center gap-4">
+            <div className="bg-white p-3 rounded-full">
+              <LocalShipping className="text-primary" />
+            </div>
+            <div>
+              <h3 className="font-medium">Free Shipping</h3>
+              <p className="text-sm text-gray-500">On all orders over $50</p>
+            </div>
           </div>
-        ))}
-    </div>
+          <div className="flex items-center gap-4">
+            <div className="bg-white p-3 rounded-full">
+              <SupportAgent className="text-primary" />
+            </div>
+            <div>
+              <h3 className="font-medium">24/7 Support</h3>
+              <p className="text-sm text-gray-500">Get help when you need it</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="bg-white p-3 rounded-full">
+              <CreditCard className="text-primary" />
+            </div>
+            <div>
+              <h3 className="font-medium">Secure Payment</h3>
+              <p className="text-sm text-gray-500">100% secure transactions</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 };
 

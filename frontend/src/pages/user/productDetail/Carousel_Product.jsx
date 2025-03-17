@@ -1,38 +1,19 @@
 import formatPrice from "@/utils/FormatPrice";
 import React, { useState } from "react";
-import { FaRegHeart } from "react-icons/fa";
-import { CiShare2 } from "react-icons/ci";
-import { FaStar } from "react-icons/fa";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { FaHeart } from "react-icons/fa6";
-import {
-  Carousel,
-  CarouselMainContainer,
-  SliderMainItem,
-  CarouselThumbsContainer,
-  SliderThumbItem,
-} from "@/components/ui/embla-carousel";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import Share from "./Share";
+
+import { Rating, Button } from "@mui/material";
+import { ShoppingCart, Favorite } from "@mui/icons-material";
+
 import { useProductStore } from "@/stores/productStore";
 import { useCartStore } from "@/stores/cartStore";
-import { percentDis } from "@/utils/Percentdis";
-import { Input } from "@/components/ui/input";
-import { LoadingButton } from "@/components/ui/loading-button";
 import { useAuthStore } from "@/stores/authStore";
 import { toast } from "sonner";
 import { useNavigate, useParams } from "react-router-dom";
-import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useWishStore } from "@/stores/wishStore";
 import { useReviewStore } from "@/stores/reviewStore";
+import { percentDis } from "@/utils/Percentdis";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 const Carousel_Product = () => {
   const { product } = useProductStore();
   const { user } = useAuthStore();
@@ -47,7 +28,7 @@ const Carousel_Product = () => {
     size: "",
   });
   const navigate = useNavigate();
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const addToCartHandler = async (e) => {
     setLoading(true);
     e.preventDefault();
@@ -79,157 +60,165 @@ const Carousel_Product = () => {
   };
   const isWish = wishes.some((item) => item.productId._id === id);
 
+  const [selectedImage, setSelectedImage] = useState(0);
   return (
     <div
-      className="flex items-start gap-32 mt-10"
+      className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4"
       style={{ userSelect: "none" }}
     >
-      <Carousel orientation="vertical" className="flex items-center gap-2">
-        <CarouselThumbsContainer className="h-[300px] basis-1/5 ">
+      <div className="space-y-4">
+        <div className="border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
+          <img
+            src={product?.images[selectedImage].url || "/placeholder.svg"}
+            alt="Tray Table"
+            width={600}
+            height={600}
+            className="w-full h-auto object-contain"
+          />
+        </div>
+        <div className="grid grid-cols-4 gap-2">
           {product?.images.map((image, index) => (
-            <SliderThumbItem
+            <button
               key={index}
-              index={index}
-              className="bg-transparent"
+              className={`border ${
+                selectedImage === index ? "border-black" : "border-gray-200"
+              } rounded-md overflow-hidden`}
+              onClick={() => setSelectedImage(index)}
             >
-              <span className="border  bg-gray-100 border-muted flex items-center justify-center h-full w-full  cursor-pointer bg-background">
-                <img src={image.url} className="object-cover h-full" alt="" />
-              </span>
-            </SliderThumbItem>
+              <img
+                src={image.url || "/placeholder.svg"}
+                alt={`Tray Table thumbnail ${index + 1}`}
+                width={100}
+                height={100}
+                className="w-full h-auto object-cover"
+              />
+            </button>
           ))}
-        </CarouselThumbsContainer>
-        <div className="relative basis-4/5">
-          <CarouselMainContainer className="h-[500px]">
-            {product?.images.map((image, index) => (
-              <SliderMainItem
-                key={index}
-                className="border bg-gray-100 border-muted flex items-center justify-center h-52"
-              >
-                <img src={image.url} className="object-cover h-full" alt="" />
-              </SliderMainItem>
-            ))}
-          </CarouselMainContainer>
         </div>
-      </Carousel>
+      </div>
 
-      <div className="flex flex-col w-1/2 gap-4">
-        <div className="flex justify-between items-center">
-          <h2 className="font-semibold text-2xl ">{product?.name}</h2>
-          <i className="p-2 cursor-pointer bg-gray-100 rounded-full">
-            <Dialog>
-              <DialogTrigger asChild>
-                <CiShare2 size={20} />
-              </DialogTrigger>
-              <Share />
-            </Dialog>
-          </i>
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <div className="flex items-center">
+            <Rating value={4.5} precision={0.5} readOnly />
+            <span className="ml-2 text-sm text-gray-500">
+              ({reviews?.length} Đánh giá)
+            </span>
+          </div>
+          <h1 className="text-3xl font-bold">{product?.name}</h1>
+          <p className="text-gray-600">
+            {product?.description.substring(0, 100)}
+          </p>
         </div>
-        <div className="flex items-center gap-2 text-gray-600">
-          <FaStar className="text-yellow-500" />
-          <p>{product?.avgRate.toFixed(1)} -</p>
-          <p>{reviews?.length} Đánh giá</p>
-        </div>
-        <div className="flex gap-2 items-end border-b pb-3">
-          <span className="text-2xl font-semibold text-red-500">
+        <div className="flex items-center space-x-2">
+          <span className="text-2xl font-bold">
             {formatPrice(product?.price)}
           </span>
-          <s className="text-gray-500">{formatPrice(product?.oldPrice)}</s>
-          <span className="text-red-500 px-1 border">
+          <span className="text-gray-500 line-through">
+            {formatPrice(product?.oldPrice)}
+          </span>
+          <span className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">
             {-percentDis(product?.oldPrice, product?.price)}%
           </span>
         </div>
-        <form className="flex flex-col gap-3">
+        <div className="space-y-4">
           <div>
-            <h3 className="font-semibold mb-2">Màu sắc</h3>
-            <Select onValueChange={(e) => setdata({ ...data, color: e })}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Chọn màu sắc" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  {product?.colors?.map((color) => (
-                    <SelectItem value={color} key={color}>
-                      {color}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <p className="text-sm font-medium mb-2">ID: {product?._id}</p>
+            <p className="text-sm text-gray-600">
+              Ước tính vận chuyển: 3-5 days
+            </p>
           </div>
-          <div className="flex flex-col">
-            <h3 className="font-semibold mb-2">Kích thước</h3>
-            <Select onValueChange={(e) => setdata({ ...data, size: e })}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Chọn kích thước" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  {product?.sizes?.map((size) => (
-                    <SelectItem value={size} key={size}>
-                      {size}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="flex flex-col">
-            <h3 className="font-semibold mb-2">Số lượng</h3>
-            <div className="flex items-center border w-fit p-1 border-red-500">
-              <Button
-                onClick={(e) => {
-                  e.preventDefault();
-                  data.quantity > 1 &&
-                    setdata({ ...data, quantity: data.quantity - 1 });
-                }}
+          <div>
+            <label className="block text-sm font-medium mb-2">Màu sắc</label>
+            <div className="flex space-x-3">
+              <ToggleButtonGroup
+                value={data.color}
+                exclusive
+                onChange={(e, color) => setdata({ ...data, color })}
+                aria-label="text alignment"
               >
-                -
-              </Button>
-              <p className="w-[50px] text-center">{data.quantity}</p>
-              <Button
-                onClick={(e) => {
-                  e.preventDefault();
-                  setdata({ ...data, quantity: data.quantity + 1 });
-                }}
-              >
-                +
-              </Button>
+                {product?.colors.map((color) => (
+                  <ToggleButton key={color} value={color} aria-label={color}>
+                    {color}
+                  </ToggleButton>
+                ))}
+              </ToggleButtonGroup>
             </div>
           </div>
-          <div className="flex gap-3">
-            {loading ? (
-              <LoadingButton loading className="w-full"></LoadingButton>
-            ) : (
-              <Button
-                onClick={addToCartHandler}
-                className="w-full"
-                disabled={data.color === "" || data.size === ""}
+          <div>
+            <label className="block text-sm font-medium mb-2">Kích thước</label>
+            <div className="flex space-x-3">
+              <ToggleButtonGroup
+                value={data.size}
+                exclusive
+                onChange={(e, size) => setdata({ ...data, size })}
+                aria-label="text alignment"
               >
-                Thêm giỏ hàng
-                <AiOutlineShoppingCart
-                  className="text-white"
-                  size={26}
-                  cursor={"pointer"}
-                />
-              </Button>
-            )}
-            {isWish ? (
-              <FaHeart
-                className="my-auto text-red-500"
-                onClick={addWishHandler}
-                cursor={"pointer"}
-                size={28}
-              />
-            ) : (
-              <FaRegHeart
-                size={28}
-                onClick={addWishHandler}
-                cursor={"pointer"}
-                className="my-auto "
-              />
-            )}
+                {product?.sizes.map((size) => (
+                  <ToggleButton key={size} value={size} aria-label={size}>
+                    {size}
+                  </ToggleButton>
+                ))}
+              </ToggleButtonGroup>
+            </div>
           </div>
-        </form>
+
+          <div className="flex space-x-4">
+            <div className="w-1/3">
+              <label className="block text-sm font-medium mb-2">Số lượng</label>
+              <div className="flex border border-gray-300 rounded-md">
+                <button
+                  className="px-3 py-2 border-r border-gray-300"
+                  onClick={() =>
+                    data.quantity > 1 &&
+                    setdata({ ...data, quantity: data.quantity - 1 })
+                  }
+                >
+                  -
+                </button>
+                <input
+                  min="1"
+                  value={data.quantity}
+                  className="w-full text-center py-2 focus:outline-none"
+                />
+                <button
+                  className="px-3 py-2 border-l border-gray-300"
+                  onClick={() =>
+                    setdata({ ...data, quantity: data.quantity + 1 })
+                  }
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Button
+              onClick={addWishHandler}
+              variant="outlined"
+              fullWidth
+              startIcon={<Favorite />}
+              className={`${
+                isWish
+                  ? "text-red-500 border-red-500"
+                  : "border-gray-300 text-gray-700"
+              } py-3 hover:bg-gray-50`}
+            >
+              Yêu thích
+            </Button>
+            <Button
+              onClick={addToCartHandler}
+              variant="contained"
+              color="primary"
+              fullWidth
+              startIcon={<ShoppingCart />}
+              className="py-3 bg-black hover:bg-gray-800 text-white"
+            >
+              Thêm giỏ hàng
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
