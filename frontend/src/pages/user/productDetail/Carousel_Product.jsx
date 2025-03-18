@@ -100,7 +100,7 @@ const Carousel_Product = () => {
       <div className="space-y-6">
         <div className="space-y-2">
           <div className="flex items-center">
-            <Rating value={4.5} precision={0.5} readOnly />
+            <Rating value={product?.avgRate} precision={0.5} readOnly />
             <span className="ml-2 text-sm text-gray-500">
               ({reviews?.length} Đánh giá)
             </span>

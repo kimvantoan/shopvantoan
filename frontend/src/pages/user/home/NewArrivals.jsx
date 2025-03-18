@@ -15,8 +15,8 @@ const NewArrivals = () => {
   }, []);
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">New Arrivals</h2>
+      <div className="flex justify-between items-center ">
+          <h2 className="text-2xl font-bold">Sản phẩm mới</h2>
           <Link to="/shop" className="text-sm font-medium flex items-center">
             Xem thêm<KeyboardArrowRight className="w-4 h-4" />
           </Link>

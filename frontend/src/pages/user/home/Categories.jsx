@@ -23,7 +23,7 @@ export function CategoryCarousel() {
   const navigate = useNavigate();
   return (
     <div className="container mx-auto py-12 px-4">
-      <h2 className="text-2xl font-bold">New Arrivals</h2>
+      <h2 className="text-2xl font-bold">Danh mục</h2>
       <Swiper
         slidesPerView={3}
         spaceBetween={30}

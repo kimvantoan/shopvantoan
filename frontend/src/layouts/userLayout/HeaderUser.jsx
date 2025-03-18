@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,6 +8,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import { AiOutlineInbox } from "react-icons/ai";
 import { FaRegUser } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
@@ -15,7 +17,7 @@ import { IoIosLogOut } from "react-icons/io";
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { useAuthStore } from "@/stores/authStore";
 import { useCartStore } from "@/stores/cartStore";
-import { Badge } from "@mui/material";
+import { Badge, Button } from "@mui/material";
 const HeaderUser = () => {
   const { user, logout } = useAuthStore();
   const { cart } = useCartStore();
@@ -51,6 +53,15 @@ const HeaderUser = () => {
       path: "/signup",
     },
   ];
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const navigate = useNavigate();
   return (
     <header className="flex items-center  px-20 justify-between p-4 border-b">
       <div className="flex items-center">
@@ -58,16 +69,13 @@ const HeaderUser = () => {
       </div>
       <nav className="hidden md:flex items-center space-x-6">
         <NavLink to="/" className="text-sm font-medium">
-          Home
+          Trang chủ
         </NavLink>
         <NavLink to="/shop" className="text-sm font-medium">
-          Shop
+          Sản phẩm
         </NavLink>
-        {/* <NavLink to="/about" className="text-sm font-medium">
-          About
-        </NavLink> */}
         <NavLink to="/contact" className="text-sm font-medium">
-          Contact
+          Liên hệ
         </NavLink>
       </nav>
       <div className="flex space-x-4 items-center">
@@ -87,22 +95,64 @@ const HeaderUser = () => {
             />
           </svg>
         </Link>
-        <DropdownMenu>
+        <Button
+          id="basic-button"
+          aria-controls={open ? "basic-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+          onClick={handleClick}
+          className="text-black"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-5 h-5"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+            />
+          </svg>
+        </Button>
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+        >
+          {user
+            ? haveUser.map((item) => (
+                <MenuItem
+                  onClick={() => {
+                    navigate(item.path), handleClose();
+                  }}
+                >
+                  <p>{item.icon}</p>
+                  <p>{item.title}</p>
+                </MenuItem>
+              ))
+            : noUser.map((item) => (
+                <MenuItem
+                  onClick={() => {
+                    navigate(item.path), handleClose();
+                  }}
+                >
+                  {item.title}
+                </MenuItem>
+              ))}
+          {user && (
+            <MenuItem onClick={logout}>
+              <IoIosLogOut /> Đăng xuất
+            </MenuItem>
+          )}
+        </Menu>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger>
-             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-5 h-5"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-              />
-            </svg>
+             
           </DropdownMenuTrigger>
           <DropdownMenuContent className="-translate-x-1/3">
             <DropdownMenuLabel>Tài khoản của tôi</DropdownMenuLabel>
@@ -126,10 +176,10 @@ const HeaderUser = () => {
               </DropdownMenuItem>
             )}
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
         <Link to={"/cart"}>
           <Badge badgeContent={cart.length} color="success">
-          <svg
+            <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
