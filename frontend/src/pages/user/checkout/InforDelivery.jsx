@@ -1,23 +1,18 @@
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
+
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
 import { useAddressStore } from "@/stores/addressStore";
 import React, { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BsBank } from "react-icons/bs";
 import { BsCashCoin } from "react-icons/bs";
 import { useOrderStore } from "@/stores/orderStore";
 import { LoadingButton } from "@/components/ui/loading-button";
-import { toast } from "sonner";
 import { useCartStore } from "@/stores/cartStore";
 const InforDelivery = () => {
   const { addresses, getAllAddress } = useAddressStore();
@@ -35,7 +30,7 @@ const InforDelivery = () => {
     <div className="flex-1 flex flex-col gap-5 px-32">
       <div>
         <h2 className="mb-2 font-semibold text-xl">Địa chỉ giao hàng</h2>
-        <Select
+        {/* <Select
           onValueChange={(value) =>
             setData({ ...data, shippingAddress: value })
           }
@@ -57,7 +52,24 @@ const InforDelivery = () => {
               ))}
             </SelectGroup>
           </SelectContent>
-        </Select>
+        </Select> */}
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Địa chỉ</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            label="Age"
+            onChange={(e) => setData({ ...data, shippingAddress: e.target.value })}
+          >
+            {addresses?.map((address) => (
+              <MenuItem value={address} key={address._id}>
+                <p className="font-bold">{address.name}</p>
+                <p>{address.phone}</p>
+                <p>{`${address.detail}, ${address.commune}, ${address.district}, ${address.city}`}</p>
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </div>
       <div>
         <h2 className="mb-2 font-semibold text-xl">Phương thức thanh toán</h2>
@@ -74,14 +86,6 @@ const InforDelivery = () => {
               nhận hàng
             </Label>
           </div>
-          {/* <Separator />
-          <div className="flex p-4 items-center space-x-2">
-            <RadioGroupItem value="Chuyển khoản qua ngân hàng" id="option-2" />
-            <Label htmlFor="option-2" className="flex items-center gap-2">
-              <BsBank className="size-7 text-yellow-500" /> Chuyển khoản qua
-              ngân hàng
-            </Label>
-          </div> */}
         </RadioGroup>
       </div>
       <div className="flex justify-between mt-5">

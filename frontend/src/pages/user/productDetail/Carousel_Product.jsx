@@ -27,6 +27,7 @@ const Carousel_Product = () => {
     quantity: 1,
     size: "",
   });
+  
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const addToCartHandler = async (e) => {
